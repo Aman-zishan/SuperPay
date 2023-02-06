@@ -1,6 +1,9 @@
-html{
+*{
+  box-sizing: border-box;
+}
+html {
   height: 100%;
-  background-color:#111827;
+  background-color: #00091d;
 }
 
 #root {

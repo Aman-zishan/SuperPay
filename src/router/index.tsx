@@ -1,5 +1,5 @@
 import App from "../App";
-import VendorDashboard from "../pages/VendorDashboard";
+import VendorDashboard from "../pages/Vendor";
 
 const routerConfig = [
   {
