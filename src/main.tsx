@@ -1,10 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { WagmiConfig } from "wagmi";
+import { createClient, configureChains, mainnet, WagmiConfig } from "wagmi";
+import { publicProvider } from "wagmi/providers/public";
 import App from "./App";
 import "./index.css";
-import { createClient, configureChains, mainnet } from "wagmi";
-import { publicProvider } from "wagmi/providers/public";
 
 const { provider, webSocketProvider } = configureChains(
   [mainnet],
