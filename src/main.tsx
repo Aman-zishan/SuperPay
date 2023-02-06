@@ -1,24 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { ProvideAuth } from "@arcana/auth-react";
-import App from "./App";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import routerConfig from "./router";
 import "./index.css";
 import { arcanaProvider } from "./utils/auth";
 
-// const { provider, webSocketProvider } = configureChains(
-//   [polygon, polygonMumbai],
-//   [publicProvider()]
-// );
-
-// const client = createClient({
-//   provider,
-//   webSocketProvider,
-// });
+const router = createBrowserRouter(routerConfig);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <ProvideAuth provider={arcanaProvider}>
-      <App />
-    </ProvideAuth>
+     <ProvideAuth provider={arcanaProvider}>
+      <RouterProvider router={router} />
+   </ProvideAuth>
   </React.StrictMode>
 );

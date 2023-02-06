@@ -1,7 +1,9 @@
 import { Auth, useAuth } from "@arcana/auth-react";
 import { arcanaProvider } from "./utils/auth";
 import { ethers } from "ethers";
-import { useEffect } from "react";
+import "flowbite";
+import "./App.css";
+import { redirect, Router } from "react-router";
 
 const getAccount = async () => {
   // Route to authenticated page
@@ -19,7 +21,7 @@ const sendMatic = async () => {
     from: pkey, // sender wallet address
     to: "0x6C000fAD7CF4Cae79314B32E2a82B6DB0cC62b3E", // receiver address
     data: "0x",
-    value: ethers.utils.parseEther("1.99"),
+    value: ethers.utils.parseEther("0"),
   };
   await signer
     .sendTransaction(transactionParameters)
@@ -43,8 +45,9 @@ function App() {
         "Loading"
       ) : auth.isLoggedIn ? (
         <>
-          <p>Logged In</p> <br />{" "}
+          <p className="text-white">Logged In</p> <br />{" "}
           <button
+            className="text-white"
             onClick={() => {
               getAccount();
             }}
@@ -53,6 +56,7 @@ function App() {
           </button>{" "}
           <br />
           <button
+            className="text-white"
             onClick={() => {
               sendMatic();
             }}
@@ -60,11 +64,17 @@ function App() {
             send matic
           </button>{" "}
           <br />
-          <button onClick={() => auth.logout()}>logout</button>
+          <button className="text-white" onClick={() => auth.logout()}>
+            logout
+          </button>
         </>
       ) : (
         <div>
-          <Auth externalWallet={true} theme={"dark"} />
+          <Auth
+            externalWallet={false}
+            theme={"dark"}
+            onLogin={() => redirect("/vendor")}
+          />
         </div>
       )}
     </div>
