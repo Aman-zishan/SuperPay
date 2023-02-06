@@ -1,24 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createClient, configureChains, mainnet, WagmiConfig } from "wagmi";
-import { publicProvider } from "wagmi/providers/public";
+import { ProvideAuth } from "@arcana/auth-react";
 import App from "./App";
 import "./index.css";
+import { arcanaProvider } from "./utils/auth";
 
-const { provider, webSocketProvider } = configureChains(
-  [mainnet],
-  [publicProvider()]
-);
+// const { provider, webSocketProvider } = configureChains(
+//   [polygon, polygonMumbai],
+//   [publicProvider()]
+// );
 
-const client = createClient({
-  provider,
-  webSocketProvider,
-});
+// const client = createClient({
+//   provider,
+//   webSocketProvider,
+// });
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <WagmiConfig client={client}>
+    <ProvideAuth provider={arcanaProvider}>
       <App />
-    </WagmiConfig>
+    </ProvideAuth>
   </React.StrictMode>
 );
