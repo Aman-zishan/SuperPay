@@ -1,3 +1,4 @@
+import AddServiceCard from "../components/AddServiceCard";
 import Navbar from "../components/Navbar";
 import ServicesCard from "../components/ServicesCard";
 
@@ -14,9 +15,9 @@ const VendorDashboard = () => {
         </div>
         <div className="mt-14 grid grid-cols-3 justify-between gap-24 px-16">
           {[...Array(5).keys()].map((_, idx) => {
-            return <ServicesCard />;
+            return <ServicesCard key={idx} />;
           })}
-          {/* <AddServiceCard /> */}
+          <AddServiceCard />
         </div>
       </section>
     </>
