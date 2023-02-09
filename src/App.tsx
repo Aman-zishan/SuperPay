@@ -2,6 +2,7 @@ import { Auth, useAuth } from "@arcana/auth-react";
 import "flowbite";
 import "./App.css";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "./utils/supabaseClient";
 
 function App() {
   const auth = useAuth();
