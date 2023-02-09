@@ -8,7 +8,12 @@ import { ProvideAuth } from "@arcana/auth-react";
 import routerConfig from "./router";
 import { arcanaProvider } from "./utils/auth";
 import "./index.css";
+import { createClient } from "@supabase/supabase-js";
 
+const supabase = createClient(
+  import.meta.env.VITE_DB_URL,
+  import.meta.env.VITE_DB_KEY
+);
 const router = createBrowserRouter(routerConfig);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

@@ -11,6 +11,7 @@
   "dependencies": {
     "@arcana/auth-react": "^0.0.2",
     "@pushprotocol/restapi": "^0.3.2",
+    "@supabase/supabase-js": "^2.7.1",
     "@superfluid-finance/sdk-core": "^0.6.1",
     "classnames": "^2.3.2",
     "ethers": "^5.7.2",
