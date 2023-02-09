@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@arcana/auth": "^1.0.0",
+    "@arcana/auth-wagmi": "^0.0.1",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^3.1.0",
