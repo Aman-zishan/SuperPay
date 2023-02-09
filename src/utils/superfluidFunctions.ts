@@ -5,9 +5,9 @@ import type { Signer } from "ethers"
 
 const sf = useContext(globalContext)
 
-export const asyncWrapper = async (asyncFunction, params = null) => {
+export const asyncWrapper = async (asyncFunction: () => {}, params: Array) => {
     try {
-        const data = await asyncFunction(params)
+        const data = await asyncFunction(...params)
         return [data, null]
     }
     catch (error) {
@@ -92,4 +92,4 @@ const batchTxns = async (txnArray: Array, signer: Signer) => {
     await sf?.batchCall(txnArray).exec(signer)
 }
 
-export {startFlow,updateFlow, approveContractToSpend, upgradeTokens, downgradeTokens, batchTxns};
+export {startFlow, updateFlow, stopFlow, approveContractToSpend, upgradeTokens, downgradeTokens, batchTxns};
