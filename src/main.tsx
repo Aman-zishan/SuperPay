@@ -11,16 +11,9 @@ import "./index.css";
 
 const router = createBrowserRouter(routerConfig);
 
-// const sf = await Framework.create({
-//   chainId: 80001,
-//   provider: new ethers.providers.Web3Provider(arcanaProvider.provider),
-// });
-
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ProvideAuth provider={arcanaProvider}>
-      {/* <DefaultContext.Provider value={sf}>
-      </DefaultContext.Provider> */}
       <RouterProvider router={router} />
     </ProvideAuth>
   </React.StrictMode>
