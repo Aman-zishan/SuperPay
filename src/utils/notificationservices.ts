@@ -1,6 +1,6 @@
 import * as PushAPI from "@pushprotocol/restapi";
 import { ethers } from "ethers";
-import { arcanaProvider } from "./auth";
+import { useSigner } from "wagmi";
 
 export const getNotification = async (address: string) => {
   const recievedNotifications = await PushAPI.user.getFeeds({
@@ -12,9 +12,7 @@ export const getNotification = async (address: string) => {
 };
 
 export const sendNotification = async (recipientAddress: string) => {
-  const provider = new ethers.providers.Web3Provider(arcanaProvider.provider);
-  const accounts = await provider.listAccounts();
-  const signer = provider.getSigner(accounts[0]);
+  const { data: signer } = useSigner();
   const apiResponse = await PushAPI.payloads.sendNotification({
     signer,
     type: 3, // target

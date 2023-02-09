@@ -1,5 +1,4 @@
-import { Auth, useAuth } from "@arcana/auth-react";
-import { arcanaProvider } from "./utils/auth";
+import { Auth, useAuth } from "@arcana/auth-wagmi";
 import { ethers } from "ethers";
 import "flowbite";
 import "./App.css";
