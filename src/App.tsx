@@ -14,7 +14,6 @@ function App() {
       ) : (
         <>
           <div>
-            <button onClick={() => navigate("/test")}>hiii</button>
             <Auth
               externalWallet={false}
               theme={"dark"}
