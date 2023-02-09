@@ -1,6 +1,7 @@
 import App from "../App";
 import Test from "../pages/Test";
 import VendorDashboard from "../pages/Vendor";
+import ServicePage from "../pages/manageService";
 
 const routerConfig = [
   {
@@ -15,6 +16,7 @@ const routerConfig = [
     path: "/test",
     element: <Test />,
   },
+  { path: "/vendor/:serviceId", element: <ServicePage /> },
 ];
 
 export default routerConfig;
