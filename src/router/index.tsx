@@ -1,4 +1,5 @@
 import App from "../App";
+import PaymentPage from "../pages/PaymentPage";
 import Test from "../pages/Test";
 import VendorDashboard from "../pages/Vendor";
 import ServicePage from "../pages/manageService";
@@ -13,6 +14,9 @@ const routerConfig = [
     element: <VendorDashboard />,
   },
   {
+    path: "/pay/:serviceId",
+    element: <PaymentPage />,
+  },
     path: "/test",
     element: <Test />,
   },
