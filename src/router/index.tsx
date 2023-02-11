@@ -1,4 +1,5 @@
 import App from "../App";
+import UserDashboard from "../pages/User";
 import VendorDashboard from "../pages/Vendor";
 
 const routerConfig = [
@@ -9,6 +10,10 @@ const routerConfig = [
   {
     path: "/vendor",
     element: <VendorDashboard />,
+  },
+  {
+    path: "/user/:userId",
+    element: <UserDashboard />,
   },
 ];
 
