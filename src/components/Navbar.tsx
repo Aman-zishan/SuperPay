@@ -3,14 +3,9 @@ const Navbar = () => {
     <nav className="border-gray-200 bg-white px-2 py-2.5 dark:bg-gray-900 sm:px-4">
       <div className="container mx-auto flex flex-wrap items-center justify-between">
         <a href="" className="flex items-center">
-          <img
-            src="https://flowbite.com/docs/images/logo.svg"
-            className="mr-3 h-6 sm:h-9"
-            alt="SuperPay Logo"
-          />
-          <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-            SuperPay
-          </span>
+          <h5 className="body-font font-monda text-2xl tracking-[0.5rem] text-white ">
+            SUPERPAY
+          </h5>
         </a>
         <div className="flex items-center md:order-2">
           <button
