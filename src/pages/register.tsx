@@ -10,6 +10,7 @@ import { supabase } from "../utils/supabaseClient";
 const Register = () => {
   const auth = useAuth();
   const navigate = useNavigate();
+  const [userIsVendor, setUserIsVendor] = useState<boolean>(false);
 
   const {
     user,
@@ -45,7 +46,9 @@ const Register = () => {
         }
         if (data) {
           alert("successfully updated data");
-          navigate("/test");
+          userIsVendor
+            ? navigate(`vendor/${userInfo.address}`)
+            : navigate(`user/${userInfo.address}`);
         }
       }
     } catch (e) {
@@ -61,8 +64,9 @@ const Register = () => {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     const userName = event.target.name.value;
-    const userIsVendor = event.target.isVendor.checked;
-    if (!userName || !userIsVendor) {
+    setUserIsVendor(event.target.isVendor.checked);
+
+    if (!userName) {
       alert("form data empty!");
       return;
     }
