@@ -1,5 +1,4 @@
 import AddServiceCard from "../components/AddServiceCard";
-import Navbar from "../components/Navbar";
 import ServicesCard from "../components/ServicesCard";
 import Layout from "../layout";
 
