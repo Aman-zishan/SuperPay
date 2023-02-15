@@ -3,63 +3,28 @@ import "flowbite";
 import "./App.css";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./utils/supabaseClient";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { arcanaProvider } from "./utils/auth";
 import Register from "./pages/register";
-
-// function App() {
-//   const auth = useAuth();
-//   const navigate = useNavigate();
-
-//   const onLogin = async () => {
-//     const address = auth.user?.address;
-//     console.log(address);
-//     if (!address) {
-//       return;
-//     }
-//     const { data, error } = await supabase
-//       .from("user")
-//       .insert([{ address: address }])
-//       .select();
-
-//     if (error) {
-//       alert("error updating DB");
-//       console.log(error);
-//       return;
-//     }
-//     if (data) {
-//       alert("successfully updated data");
-//       navigate("/test");
-//     }
-//   };
-
-//   return (
-//     <div>
-//       {auth.loading ? (
-//         "Loading"
-//       ) : (
-//         <>
-//           <div>
-//             <Auth
-//               externalWallet={false}
-//               theme={"dark"}
-//               onLogin={() => {
-//                 console.log("logged in!");
-//                 onLogin();
-//               }}
-//             />
-//           </div>
-//         </>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default App;
+import { ConnectButton } from "./components/ConnectButton";
 
 export default function App() {
+  const [data, setData] = useState<any>();
+  const [userLoggedIn, setUserLoggedIn] = useState<any>();
+  const [arcanaUserInfo, setArcanaUserInfo] = useState<any>();
   const auth = useAuth();
   const navigate = useNavigate();
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: userData } = await supabase
+        .from("user")
+        .select("address,isVendor");
+      console.log(userData);
+      setData(userData);
+    };
+
+    fetchData().catch(console.error);
+  }, []);
 
   const {
     user,
@@ -71,10 +36,23 @@ export default function App() {
     logout,
   } = auth;
 
+  if (isLoggedIn && user) {
+    console.log(user, data);
+    data.find((item: any) => {
+      if (item.address === user?.address) {
+        item.isVendor
+          ? navigate(`vendor/${item.address}`)
+          : navigate(`user/${item.address}`);
+      } else {
+        navigate("register");
+        return;
+      }
+    });
+  }
   return (
     <>
       {loading && <p style={{ color: "white" }}>loading</p>}
-      {!loading && !isLoggedIn && <Register></Register>}
+      {!loading && !isLoggedIn && <ConnectButton></ConnectButton>}
       {!loading && isLoggedIn && (
         <h2 style={{ color: "white" }}>{user?.email} logged in!</h2>
       )}

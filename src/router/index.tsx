@@ -4,11 +4,16 @@ import PaymentPage from "../pages/PaymentPage";
 import Test from "../pages/Test";
 import VendorDashboard from "../pages/Vendor";
 import ServicePage from "../pages/manageService";
+import Register from "../pages/register";
 
 const routerConfig = [
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
   {
     path: "/vendor",
