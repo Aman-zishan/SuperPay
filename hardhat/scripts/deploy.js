@@ -1,31 +1,47 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
-// will compile your contracts, add the Hardhat Runtime Environment's members to the
-// global scope, and execute the script.
-const hre = require("hardhat");
+const hre = require("hardhat")
+const { Framework } = require("@superfluid-finance/sdk-core")
+require("dotenv").config()
 
+//to run this script:
+//1) Make sure you've created your own .env file
+//2) Make sure that you have your network specified in hardhat.config.js
+//3) run: npx hardhat run scripts/deploy.js --network goerli
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
+    // Hardhat always runs the compile task when running scripts with its command
+    // line interface.
+    //
+    // If this script is run directly using `node` you may want to call compile
+    // manually to make sure everything is compiled
+    // await hre.run('compile');
 
-  const lockedAmount = hre.ethers.utils.parseEther("1");
+    const provider = new hre.ethers.providers.JsonRpcProvider(
+        process.env.MUMBAI_URL
+    )
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+    const sf = await Framework.create({
+        chainId: (await provider.getNetwork()).chainId,
+        provider
+    })
 
-  await lock.deployed();
+    
+    // We get the contract to deploy
+    const SuperApp = await hre.ethers.getContractFactory("SuperApp")
+    //deploy the money router account using the proper host address and the address of the first signer
+    const superApp = await SuperApp.deploy(
+        process.env.SUPERTOKEN_ADDRESS,
+        sf.settings.config.hostAddress,
+        sf.settings.config.cfaV1Address
+    )
 
-  console.log(
-    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
-  );
+    await superApp.deployed()
+
+    console.log("superApp deployed to:", superApp.address)
+    //0xeADBc650d077Fc39afF1d5D48038eC45fA342a52
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+main().catch(error => {
+    console.error(error)
+    process.exitCode = 1
+})
