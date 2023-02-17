@@ -1,6 +1,6 @@
 import classNames from "classnames";
 
-const UserSubscriptions = ({ className }) => {
+const UserSubscriptions = ({ className }: any) => {
   const vendors = [
     {
       name: "Google",

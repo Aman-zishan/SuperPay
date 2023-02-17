@@ -8,10 +8,10 @@ import { arcanaProvider } from "./utils/auth";
 import Register from "./pages/register";
 import { ConnectButton } from "./components/ConnectButton";
 
-export default function App() {
+const App = () => {
   const [data, setData] = useState<any>();
-  const [userLoggedIn, setUserLoggedIn] = useState<any>();
-  const [arcanaUserInfo, setArcanaUserInfo] = useState<any>();
+  const [userExists, setUserExists] = useState<boolean>(false);
+  const [loggedinuser, setloggedinuser] = useState<any>();
   const auth = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
@@ -40,14 +40,22 @@ export default function App() {
     console.log(user, data);
     data.find((item: any) => {
       if (item.address === user?.address) {
-        item.isVendor
-          ? navigate(`vendor/${item.address}`)
-          : navigate(`user/${item.address}`);
-      } else {
-        navigate("register");
-        return;
+        // item.isVendor
+        //   ? navigate(`vendor/${item.address}`)
+        //   : navigate(`user/${item.address}`);
+        setUserExists(true);
+        setloggedinuser(item);
       }
     });
+    if (userExists) {
+      console.log("user exists");
+      loggedinuser.isVendor
+        ? navigate(`vendor/${loggedinuser.address}`)
+        : navigate(`user/${loggedinuser.address}`);
+    } else {
+      //logout();
+      navigate("register");
+    }
   }
   return (
     <>
@@ -63,4 +71,6 @@ export default function App() {
       )}
     </>
   );
-}
+};
+
+export default App;

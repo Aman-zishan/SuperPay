@@ -1,7 +1,5 @@
 import { useAuth } from "@arcana/auth-react";
 import React from "react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Layout from "../layout";
 import { arcanaProvider } from "../utils/auth";
@@ -10,7 +8,6 @@ import { supabase } from "../utils/supabaseClient";
 const Register = () => {
   const auth = useAuth();
   const navigate = useNavigate();
-  const [userIsVendor, setUserIsVendor] = useState<boolean>(false);
 
   const {
     user,
@@ -21,6 +18,7 @@ const Register = () => {
     provider,
     logout,
   } = auth;
+
   const onConnectClick = async (name: string, isVendor: boolean) => {
     try {
       await connect();
@@ -36,7 +34,14 @@ const Register = () => {
         }
         const { data, error } = await supabase
           .from("user")
-          .insert([{ address: address, name: name, isVendor: isVendor }])
+          .insert([
+            {
+              address: address,
+              name: name,
+              isVendor: isVendor,
+              email: userInfo.email,
+            },
+          ])
           .select();
 
         if (error) {
@@ -45,10 +50,21 @@ const Register = () => {
           return;
         }
         if (data) {
-          alert("successfully updated data");
-          userIsVendor
-            ? navigate(`vendor/${userInfo.address}`)
-            : navigate(`user/${userInfo.address}`);
+          console.log("user data saved in DB");
+        }
+        console.log("after push to user isVendor: ", isVendor);
+        if (isVendor) {
+          await supabase
+            .from("vendor")
+            .insert([{ address: address, name: name }])
+            .select();
+          navigate(`/vendor/${userInfo.address}`);
+        } else {
+          await supabase
+            .from("vendor_customer")
+            .insert([{ address: address, name: name }])
+            .select();
+          navigate(`/user/${userInfo.address}`);
         }
       }
     } catch (e) {
@@ -64,7 +80,7 @@ const Register = () => {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     const userName = event.target.name.value;
-    setUserIsVendor(event.target.isVendor.checked);
+    const userIsVendor = event.target.isVendor.checked;
 
     if (!userName) {
       alert("form data empty!");
