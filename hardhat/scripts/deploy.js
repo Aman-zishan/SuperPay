@@ -36,7 +36,7 @@ async function main() {
     await superApp.deployed()
 
     console.log("superApp deployed to:", superApp.address)
-    //0xeADBc650d077Fc39afF1d5D48038eC45fA342a52
+    //0x76EdA1C989fF33fcbdff574afb925c82dbCc1a90
 }
 
 // We recommend this pattern to be able to use async/await everywhere
