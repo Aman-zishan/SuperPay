@@ -116,14 +116,79 @@ const Navbar = () => {
                 About Us
               </a>
             </li>
-            <li>
-              <a
-                href="#"
-                className="block rounded py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-white"
-              >
-                Notifications
-              </a>
-            </li>
+            <div
+              id="mega-menu"
+              className="hidden w-full items-center justify-between text-sm md:order-1 md:flex md:w-auto"
+            >
+              <ul className="mt-4 flex flex-col font-medium md:mt-0 md:flex-row md:space-x-8">
+                <li>
+                  <button
+                    id="mega-menu-dropdown-button"
+                    data-dropdown-toggle="mega-menu-dropdown"
+                    className="flex  w-full items-center justify-between overscroll-y-auto border-b border-gray-100 py-2 pl-3 pr-4 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:w-auto md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-600 md:dark:hover:bg-transparent md:dark:hover:text-blue-500"
+                  >
+                    Company{" "}
+                    <svg
+                      aria-hidden="true"
+                      className="ml-1 mt-1 h-5 w-5 md:h-4 md:w-4"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </button>
+                  <div
+                    id="mega-menu-dropdown"
+                    className="absolute z-10 hidden max-h-[330px] w-auto grid-cols-2 overflow-y-scroll rounded-lg border border-gray-100 bg-white text-sm shadow-md dark:border-gray-700 dark:bg-gray-700 md:grid-cols-3"
+                  >
+                    <div className="p-4 pb-0 text-gray-900 dark:text-white md:pb-4">
+                      <ul
+                        className="space-y-4"
+                        aria-labelledby="mega-menu-dropdown-button"
+                      >
+                        <li className="border-b-[1px] border-solid border-gray-400 pb-4">
+                          <div className="format max-w-[300px] dark:format-invert">
+                            <h3 className="mb-0">Subscription started!</h3>
+                            <p>
+                              A new Subscription to 0x..39 has been started!
+                            </p>
+                          </div>
+                        </li>
+                        <li className="border-b-[1px] border-solid border-gray-400 pb-4">
+                          <div className="format max-w-[300px] dark:format-invert">
+                            <h3 className="mb-0">Subscription started!</h3>
+                            <p>
+                              A new Subscription to 0x..39 has been started!
+                            </p>
+                          </div>
+                        </li>
+                        <li className="border-b-[1px] border-solid border-gray-400 pb-4">
+                          <div className="format max-w-[300px] dark:format-invert">
+                            <h3 className="mb-0">Subscription started!</h3>
+                            <p>
+                              A new Subscription to 0x..39 has been started!
+                            </p>
+                          </div>
+                        </li>
+                        <li className="border-b-[1px] border-solid border-gray-400 pb-4">
+                          <div className="format max-w-[300px] dark:format-invert">
+                            <h3 className="mb-0">Subscription started!</h3>
+                            <p>
+                              A new Subscription to 0x..39 has been started!
+                            </p>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </ul>
         </div>
       </div>
