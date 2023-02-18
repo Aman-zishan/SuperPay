@@ -42,6 +42,17 @@ contract SuperApp is Ownable, SuperAppBase {
     mapping(address => mapping(address => int96)) services; // user => vendor => flowRate
     mapping(address => address[]) vendorList; //user => list of vendors user subscribed to
 
+    function getVendorList(address add) public view returns (address[] memory) {
+        return vendorList[add];
+    }
+
+    function getServices(
+        address usr,
+        address vendor
+    ) public view returns (int96) {
+        return services[usr][vendor];
+    }
+
     constructor(
         ISuperToken acceptedToken,
         ISuperfluid _host,
@@ -146,6 +157,14 @@ contract SuperApp is Ownable, SuperAppBase {
         newCtx = _ctx;
 
         ISuperfluid.Context memory decompiledContext = host.decodeCtx(newCtx);
+
+        if (
+            keccak256(abi.encodePacked(string(decompiledContext.userData))) ==
+            keccak256(abi.encodePacked(""))
+        ) {
+            return newCtx;
+        }
+
         (address vendorAddress, int96 flowRate) = abi.decode(
             decompiledContext.userData,
             (address, int96)
@@ -167,11 +186,11 @@ contract SuperApp is Ownable, SuperAppBase {
         if (outFlowRate == 0) {
             newCtx = _acceptedToken.createFlowWithCtx(
                 vendorAddress,
-                (flowRate * 9) / 100,
+                (flowRate * 99) / 100,
                 newCtx
             );
         } else {
-            int96 newOutFlowRate = outFlowRate + ((flowRate * 9) / 100);
+            int96 newOutFlowRate = outFlowRate + ((flowRate * 99) / 100);
 
             newCtx = _acceptedToken.updateFlowWithCtx(
                 vendorAddress,
@@ -182,7 +201,7 @@ contract SuperApp is Ownable, SuperAppBase {
 
         int96 outFlowRateToOwner = _acceptedToken.getFlowRate(
             address(this),
-            vendorAddress
+            owner()
         );
 
         if (outFlowRateToOwner == 0) {
@@ -221,6 +240,14 @@ contract SuperApp is Ownable, SuperAppBase {
         newCtx = _ctx;
 
         ISuperfluid.Context memory decompiledContext = host.decodeCtx(newCtx);
+
+        if (
+            keccak256(abi.encodePacked(string(decompiledContext.userData))) ==
+            keccak256(abi.encodePacked(""))
+        ) {
+            return newCtx;
+        }
+
         (address vendorAddress, int96 flowRate, string memory operation) = abi
             .decode(decompiledContext.userData, (address, int96, string));
 
@@ -238,14 +265,14 @@ contract SuperApp is Ownable, SuperAppBase {
             if (outFlowRate == 0) {
                 newCtx = _acceptedToken.createFlowWithCtx(
                     vendorAddress,
-                    (flowRate * 9) / 100,
+                    (flowRate * 99) / 100,
                     newCtx
                 );
 
                 addVendorToVendorList(sender, vendorAddress);
                 services[sender][vendorAddress] = flowRate;
             } else {
-                int96 newOutFlowRate = outFlowRate + ((flowRate * 9) / 100);
+                int96 newOutFlowRate = outFlowRate + ((flowRate * 99) / 100);
 
                 newCtx = _acceptedToken.updateFlowWithCtx(
                     vendorAddress,
@@ -267,7 +294,7 @@ contract SuperApp is Ownable, SuperAppBase {
         } else if (
             keccak256(bytes(operation)) == keccak256(bytes("removeService"))
         ) {
-            int96 newOutFlowRate = outFlowRate - ((flowRate * 9) / 100);
+            int96 newOutFlowRate = outFlowRate - ((flowRate * 99) / 100);
 
             newCtx = _acceptedToken.updateFlowWithCtx(
                 vendorAddress,
@@ -275,7 +302,11 @@ contract SuperApp is Ownable, SuperAppBase {
                 newCtx
             );
 
-            removeVendorFromVendorList(sender, vendorAddress);
+            if (flowRate == services[sender][vendorAddress]) {
+                removeVendorFromVendorList(sender, vendorAddress);
+                delete services[sender][vendorAddress];
+            }
+
             services[sender][vendorAddress] -= flowRate;
 
             int96 newOutFlowRateToOwner = outFlowRateToOwner - (flowRate / 100);
@@ -322,7 +353,7 @@ contract SuperApp is Ownable, SuperAppBase {
                 );
 
                 int96 newOutFlowRate = outFlowRate -
-                    ((services[sender][vendorAddress] * 9) / 100);
+                    ((services[sender][vendorAddress] * 99) / 100);
 
                 newCtx = _acceptedToken.updateFlowWithCtx(
                     vendorAddress,
@@ -331,11 +362,11 @@ contract SuperApp is Ownable, SuperAppBase {
                 );
             }
 
-            delete vendorList[sender];
             for (uint i = 0; i < vendorList[sender].length; i++) {
                 address vendorAddress = vendorList[sender][i];
                 delete services[sender][vendorAddress];
             }
+            delete vendorList[sender];
 
             //fetch current flowRate to owner
             int96 outFlowRateToOwner = _acceptedToken.getFlowRate(
