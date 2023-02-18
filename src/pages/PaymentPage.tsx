@@ -1,13 +1,32 @@
 import classNames from "classnames";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { supabase } from "../utils/supabaseClient";
 
 const PaymentPage = () => {
   const [walletConnected, setwalletConnected] = useState(false);
+  const { serviceId } = useParams();
+  const [serviceData, setserviceData] = useState<any>();
+  console.log(serviceId);
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: serviceData } = await supabase
+        .from("service")
+        .select()
+        .eq("id", serviceId);
+      setserviceData(serviceData);
+    };
+
+    fetchData().catch(console.error);
+  }, []);
+  if (!serviceData) {
+    return <h2>Something went wrong</h2>;
+  }
 
   return (
     <>
       <header className="format m-auto my-[3rem] dark:format-invert">
-        <h1>SuperPay X Google</h1>
+        <h1>{serviceData[0].name}</h1>
       </header>
       <img
         className="m-auto max-w-[21rem] rounded-t-lg"
@@ -15,14 +34,11 @@ const PaymentPage = () => {
         alt=""
       />
       <div className="format m-auto my-12 dark:format-invert">
-        <p className="m-auto mb-12 max-w-[23rem]">
-          Youtube premium provides the best music quality and hi resolution
-          sounds.
-        </p>
+        <p className="m-auto mb-12 max-w-[23rem]">Zomato gold service</p>
         <div className="flex flex-col gap-1">
-          <h4>Service Name: Youtube Premium</h4>
-          <h4>Rate: 0.03 USDC/sec</h4>
-          <h4>Plan: 12 months</h4>
+          <h4>Service Name : {serviceData[0].name}</h4>
+          <h4>Rate : {serviceData[0].rate}</h4>
+          <h4>Plan : 12 months</h4>
         </div>
       </div>
       <button

@@ -13,7 +13,7 @@ const VendorDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       const { data: userData } = await supabase
-        .from("user")
+        .from("vendor")
         .select()
         .eq("address", vendorId);
       const { data: vendorServiceData } = await supabase
