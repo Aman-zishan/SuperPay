@@ -1,9 +1,7 @@
-import { useContext } from "react"
-import globalContext from "./globalState"
 import { ethers } from "ethers"
 import type { Signer } from "ethers"
+import type {Framework} from "@superfluid-finance/sdk-core";
 
-const sf = useContext(globalContext)
 
 export const asyncWrapper = async (asyncFunction: () => {}, params: Array) => {
     try {
@@ -15,22 +13,22 @@ export const asyncWrapper = async (asyncFunction: () => {}, params: Array) => {
     }
 }
 
-const startFlow = async (sender: string, receiver: string, flowRate: string, signer: Signer, userData?: string ) => {
+const startFlow = async (sf:Framework, sender: string, receiver: string, flowRate: string, signer: Signer, userData?: string ) => {
 //load the token you'd like to use like this 
 //note that tokens may be loaded by symbol or by address
-const superToken = await sf?.loadSuperToken("DAIx");
+const superToken = await sf?.loadSuperToken("0x93D50cF93EBDa2f06f564339a31E0cac81fa479C");
 
 let flowOp = superToken?.createFlow({
-  sender,
-  receiver,
-  flowRate,
-  userData
+    sender,
+    receiver,
+    flowRate,
+    userData,
 });
 
-await flowOp?.exec( signer ); // should have same address as `sender`
+    await flowOp?.exec( signer ); // should have same address as `sender`
 }
 
-const updateFlow = async (sender: string, receiver: string, flowRate: string, signer: Signer, userData?: string ) => {
+const updateFlow = async (sf:Framework, sender: string, receiver: string, flowRate: string, signer: Signer, userData?: string ) => {
 //load the token you'd like to use like this 
 //note that tokens may be loaded by symbol or by address
 const superToken = await sf?.loadSuperToken("DAIx");
