@@ -296,11 +296,19 @@ contract SuperApp is Ownable, SuperAppBase {
         ) {
             int96 newOutFlowRate = outFlowRate - ((flowRate * 99) / 100);
 
-            newCtx = _acceptedToken.updateFlowWithCtx(
-                vendorAddress,
-                newOutFlowRate,
-                newCtx
-            );
+            if (newOutFlowRate == 0) {
+                newCtx = _acceptedToken.deleteFlowWithCtx(
+                    address(this),
+                    vendorAddress,
+                    newCtx
+                );
+            } else {
+                newCtx = _acceptedToken.updateFlowWithCtx(
+                    vendorAddress,
+                    newOutFlowRate,
+                    newCtx
+                );
+            }
 
             if (flowRate == services[sender][vendorAddress]) {
                 removeVendorFromVendorList(sender, vendorAddress);
@@ -311,11 +319,19 @@ contract SuperApp is Ownable, SuperAppBase {
 
             int96 newOutFlowRateToOwner = outFlowRateToOwner - (flowRate / 100);
 
-            newCtx = _acceptedToken.updateFlowWithCtx(
-                owner(),
-                newOutFlowRateToOwner,
-                newCtx
-            );
+            if (newOutFlowRateToOwner == 0) {
+                newCtx = _acceptedToken.deleteFlowWithCtx(
+                    address(this),
+                    owner(),
+                    newCtx
+                );
+            } else {
+                newCtx = _acceptedToken.updateFlowWithCtx(
+                    owner(),
+                    newOutFlowRateToOwner,
+                    newCtx
+                );
+            }
         }
     }
 
