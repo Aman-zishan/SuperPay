@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AddServiceCard from "../components/AddServiceCard";
-import Navbar from "../components/Navbar";
 import ServicesCard from "../components/ServicesCard";
 import Layout from "../layout";
 import { supabase } from "../utils/supabaseClient";
