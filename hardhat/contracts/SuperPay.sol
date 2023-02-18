@@ -355,11 +355,19 @@ contract SuperApp is Ownable, SuperAppBase {
                 int96 newOutFlowRate = outFlowRate -
                     ((services[sender][vendorAddress] * 99) / 100);
 
-                newCtx = _acceptedToken.updateFlowWithCtx(
-                    vendorAddress,
-                    newOutFlowRate,
-                    newCtx
-                );
+                if (newOutFlowRate == 0) {
+                    newCtx = _acceptedToken.deleteFlowWithCtx(
+                        address(this),
+                        vendorAddress,
+                        newCtx
+                    );
+                } else {
+                    newCtx = _acceptedToken.updateFlowWithCtx(
+                        vendorAddress,
+                        newOutFlowRate,
+                        newCtx
+                    );
+                }
             }
 
             for (uint i = 0; i < vendorList[sender].length; i++) {
@@ -368,52 +376,30 @@ contract SuperApp is Ownable, SuperAppBase {
             }
             delete vendorList[sender];
 
-            //fetch current flowRate to owner
+            // fetch current flowRate to owner
             int96 outFlowRateToOwner = _acceptedToken.getFlowRate(
                 address(this),
                 owner()
             );
 
-            int96 newOutFlowRateToOwner = outFlowRateToOwner -
-                (totalFlowRateFromSender / 100);
+            if (outFlowRateToOwner != 0) {
+                int96 newOutFlowRateToOwner = outFlowRateToOwner -
+                    (totalFlowRateFromSender / 100);
 
-            newCtx = _acceptedToken.updateFlowWithCtx(
-                owner(),
-                newOutFlowRateToOwner,
-                newCtx
-            );
+                if (newOutFlowRateToOwner == 0) {
+                    newCtx = _acceptedToken.deleteFlowWithCtx(
+                        address(this),
+                        owner(),
+                        newCtx
+                    );
+                } else {
+                    newCtx = _acceptedToken.updateFlowWithCtx(
+                        owner(),
+                        newOutFlowRateToOwner,
+                        newCtx
+                    );
+                }
+            }
         }
     }
-
-    // ---------------------------------------------------------------------------------------------
-    // INTERNAL LOGIC
-
-    /// @dev Updates the outflow. The flow is either created, updated, or deleted, depending on the
-    /// net flow rate.
-    /// @param ctx The context byte array from the Host's calldata.
-    /// @return newCtx The new context byte array to be returned to the Host.
-    /// send 99% to vendor and 1% to us
-    // function _updateOutflowToVendor(
-    //     bytes calldata ctx,
-    //     address sender
-    // ) private returns (bytes memory newCtx) {
-    //     newCtx = ctx;
-
-    //     int96 netFlowRate = _acceptedToken.getFlowRate(sender,receiver);
-
-    //     int96 outFlowRate = _acceptedToken.getFlowRate(address(this), _receiver);
-
-    //     int96 inFlowRate = netFlowRate + outFlowRate;
-
-    //     if (inFlowRate == 0) {
-    //         // The flow does exist and should be deleted.
-    //         newCtx = _acceptedToken.deleteFlowWithCtx(address(this), _receiver, ctx);
-    //     } else if (outFlowRate != 0) {
-    //         // The flow does exist and needs to be updated.
-    //         newCtx = _acceptedToken.updateFlowWithCtx(_receiver, inFlowRate, ctx);
-    //     } else {
-    //         // The flow does not exist but should be created.
-    //         newCtx = _acceptedToken.createFlowWithCtx(_receiver, inFlowRate, ctx);
-    //     }
-    // }
 }
