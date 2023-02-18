@@ -3,7 +3,7 @@ import UserDashboard from "../pages/User";
 import PaymentPage from "../pages/PaymentPage";
 import Test from "../pages/Test";
 import VendorDashboard from "../pages/Vendor";
-import ServicePage from "../pages/manageService";
+import Register from "../pages/register";
 
 const routerConfig = [
   {
@@ -11,9 +11,10 @@ const routerConfig = [
     element: <App />,
   },
   {
-    path: "/vendor",
-    element: <VendorDashboard />,
+    path: "/register",
+    element: <Register />,
   },
+
   {
     path: "/user/:userId",
     element: <UserDashboard />,
@@ -26,7 +27,7 @@ const routerConfig = [
     path: "/test",
     element: <Test />,
   },
-  { path: "/vendor/:serviceId", element: <ServicePage /> },
+  { path: "/vendor/:vendorId", element: <VendorDashboard /> },
 ];
 
 export default routerConfig;

@@ -3,63 +3,28 @@ import "flowbite";
 import "./App.css";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./utils/supabaseClient";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { arcanaProvider } from "./utils/auth";
 import Register from "./pages/register";
+import { ConnectButton } from "./components/ConnectButton";
 
-// function App() {
-//   const auth = useAuth();
-//   const navigate = useNavigate();
-
-//   const onLogin = async () => {
-//     const address = auth.user?.address;
-//     console.log(address);
-//     if (!address) {
-//       return;
-//     }
-//     const { data, error } = await supabase
-//       .from("user")
-//       .insert([{ address: address }])
-//       .select();
-
-//     if (error) {
-//       alert("error updating DB");
-//       console.log(error);
-//       return;
-//     }
-//     if (data) {
-//       alert("successfully updated data");
-//       navigate("/test");
-//     }
-//   };
-
-//   return (
-//     <div>
-//       {auth.loading ? (
-//         "Loading"
-//       ) : (
-//         <>
-//           <div>
-//             <Auth
-//               externalWallet={false}
-//               theme={"dark"}
-//               onLogin={() => {
-//                 console.log("logged in!");
-//                 onLogin();
-//               }}
-//             />
-//           </div>
-//         </>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default App;
-
-export default function App() {
+const App = () => {
+  const [data, setData] = useState<any>();
+  const [userExists, setUserExists] = useState<boolean>(false);
+  const [loggedinuser, setloggedinuser] = useState<any>();
   const auth = useAuth();
   const navigate = useNavigate();
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: userData } = await supabase
+        .from("user")
+        .select("address,isVendor");
+      console.log(userData);
+      setData(userData);
+    };
+
+    fetchData().catch(console.error);
+  }, []);
 
   const {
     user,
@@ -71,10 +36,31 @@ export default function App() {
     logout,
   } = auth;
 
+  if (isLoggedIn && user) {
+    console.log(user, data);
+    data.find((item: any) => {
+      if (item.address === user?.address) {
+        // item.isVendor
+        //   ? navigate(`vendor/${item.address}`)
+        //   : navigate(`user/${item.address}`);
+        setUserExists(true);
+        setloggedinuser(item);
+      }
+    });
+    if (userExists) {
+      console.log("user exists");
+      loggedinuser.isVendor
+        ? navigate(`vendor/${loggedinuser.address}`)
+        : navigate(`user/${loggedinuser.address}`);
+    } else {
+      //logout();
+      navigate("register");
+    }
+  }
   return (
     <>
       {loading && <p style={{ color: "white" }}>loading</p>}
-      {!loading && !isLoggedIn && <Register></Register>}
+      {!loading && !isLoggedIn && <ConnectButton></ConnectButton>}
       {!loading && isLoggedIn && (
         <h2 style={{ color: "white" }}>{user?.email} logged in!</h2>
       )}
@@ -85,4 +71,6 @@ export default function App() {
       )}
     </>
   );
-}
+};
+
+export default App;
