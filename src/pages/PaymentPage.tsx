@@ -1,13 +1,18 @@
+import { useContext } from "react";
+import globalContext from "../utils/globalState";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "../utils/supabaseClient";
+import { startFlow, updateFlow } from "../utils/superfluidFunctions";
+import { ethers } from "ethers";
 
 const PaymentPage = () => {
   const [walletConnected, setwalletConnected] = useState(false);
+  const [paymentDone, setPaymentDone] = useState(false);
   const { serviceId } = useParams();
   const [serviceData, setserviceData] = useState<any>();
-  console.log(serviceId);
+
   useEffect(() => {
     const fetchData = async () => {
       const { data: serviceData } = await supabase
@@ -23,10 +28,64 @@ const PaymentPage = () => {
     return <h2>Something went wrong</h2>;
   }
 
+  const sf = useContext(globalContext);
+
+  const startSubscription = () => {
+    const wallet = new ethers.Wallet(
+      "10a18b5294170edec5f8de73bc2650e8d0c112742275e0c5f229461340e67a28",
+      ethers.getDefaultProvider(
+        "https://intensive-wispy-rain.matic-testnet.discover.quiknode.pro/949bfe065d64157bb216deed0b3148aa1ca4effd/"
+      )
+    );
+    const sender = "0x0c49FFE688435dD45F3Bc47Ad9D8B0BfBc7Bad11";
+    const receiverContract = "0x76EdA1C989fF33fcbdff574afb925c82dbCc1a90";
+    const vendorAddress = "0x40d77E65c59710260543c4Bd6e59704F28637D4B";
+    const flowRate = "2500000000000000";
+    const abi = new ethers.utils.AbiCoder();
+
+    const userData = abi.encode(
+      ["address", "int96"],
+      [vendorAddress, flowRate]
+    );
+
+    startFlow(sf, sender, receiverContract, flowRate, wallet, userData).then(
+      () => {
+        setPaymentDone(true);
+        console.log("p done");
+      }
+    );
+  };
+
+  const removeService = () => {
+    const wallet = new ethers.Wallet(
+      "10a18b5294170edec5f8de73bc2650e8d0c112742275e0c5f229461340e67a28",
+      ethers.getDefaultProvider(
+        "https://intensive-wispy-rain.matic-testnet.discover.quiknode.pro/949bfe065d64157bb216deed0b3148aa1ca4effd/"
+      )
+    );
+    const sender = "0x0c49FFE688435dD45F3Bc47Ad9D8B0BfBc7Bad11";
+    const receiverContract = "0x76EdA1C989fF33fcbdff574afb925c82dbCc1a90";
+    const vendorAddress = "0x40d77E65c59710260543c4Bd6e59704F28637D4B";
+    const flowRate = "1";
+    const abi = new ethers.utils.AbiCoder();
+
+    const userData = abi.encode(
+      ["address", "int96", "string"],
+      [vendorAddress, flowRate, "removeService"]
+    );
+
+    updateFlow(sf, sender, receiverContract, flowRate, wallet, userData).then(
+      () => {
+        setPaymentDone(true);
+        console.log("p done");
+      }
+    );
+  };
+
   return (
     <>
       <header className="format m-auto my-[3rem] dark:format-invert">
-        <h1>{serviceData[0].name}</h1>
+        <h1>{serviceData[0].name ? serviceData[0].name : ""}</h1>
       </header>
       <img
         className="m-auto max-w-[21rem] rounded-t-lg"
@@ -47,7 +106,7 @@ const PaymentPage = () => {
           "inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300",
           walletConnected ? "bg-green-500 hover:bg-green-700" : "bg-blue-700"
         )}
-        onClick={() => setwalletConnected(true)}
+        onClick={() => startSubscription()}
       >
         {walletConnected ? "Subscribe To Plan" : "Connect Wallet"}
         {walletConnected ? (
