@@ -25,7 +25,7 @@ export const subscribeChannel = async ({ address, provider }: argType) => {
 export const getNotification = async (address: string) => {
   const recievedNotifications = await PushAPI.user.getFeeds({
     user: `eip155:80001:${address}`, // user address in CAIP
-    spam: false,
+    spam: true,
     env: "staging",
   });
   return recievedNotifications;
