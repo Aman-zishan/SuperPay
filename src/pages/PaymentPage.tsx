@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import globalContext from "../utils/globalState";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
@@ -19,7 +19,7 @@ const PaymentPage = () => {
         .from("service")
         .select()
         .eq("id", serviceId);
-      setserviceData(serviceData);
+      setserviceData(serviceData[0]);
     };
 
     fetchData().catch(console.error);
@@ -38,7 +38,7 @@ const PaymentPage = () => {
       )
     );
     const sender = "0x0c49FFE688435dD45F3Bc47Ad9D8B0BfBc7Bad11";
-    const receiverContract = "0x76EdA1C989fF33fcbdff574afb925c82dbCc1a90";
+    const receiverContract = "0xb19217b3FfeA75aBC1B3F1a976Cd9Bf970F9A01D";
     const vendorAddress = "0x40d77E65c59710260543c4Bd6e59704F28637D4B";
     const flowRate = "2500000000000000";
     const abi = new ethers.utils.AbiCoder();
@@ -85,7 +85,7 @@ const PaymentPage = () => {
   return (
     <>
       <header className="format m-auto my-[3rem] dark:format-invert">
-        <h1>{serviceData[0].name ? serviceData[0].name : ""}</h1>
+        <h1>{serviceData.name ? serviceData.name : ""}</h1>
       </header>
       <img
         className="m-auto max-w-[21rem] rounded-t-lg"
@@ -95,8 +95,8 @@ const PaymentPage = () => {
       <div className="format m-auto my-12 dark:format-invert">
         <p className="m-auto mb-12 max-w-[23rem]">Zomato gold service</p>
         <div className="flex flex-col gap-1">
-          <h4>Service Name : {serviceData[0].name}</h4>
-          <h4>Rate : {serviceData[0].rate}</h4>
+          <h4>Service Name : {serviceData.name}</h4>
+          <h4>Rate : {serviceData.rate} SP/sec</h4>
           <h4>Plan : 12 months</h4>
         </div>
       </div>
