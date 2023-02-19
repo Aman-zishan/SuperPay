@@ -85,7 +85,7 @@ const LandingPageTemplate = () => {
           style={{
             backgroundPosition: "50%",
             backgroundImage: `url(
-              "https://mdbcdn.b-cdn.net/img/new/slides/146.webp"
+              "/Illustrations/bg.gif"
             )`,
             height: "100vh",
           }}
