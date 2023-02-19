@@ -5,7 +5,7 @@ import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "../utils/supabaseClient";
-import { startFlow, updateFlow } from "../utils/superfluidFunctions";
+import { startFlow, updateFlow, getFlow } from "../utils/superfluidFunctions";
 import { ethers } from "ethers";
 
 const PaymentPage = () => {
@@ -48,7 +48,7 @@ const PaymentPage = () => {
 
   const sf = useContext(globalContext);
 
-  const startSubscription = () => {
+  const startSubscription = async () => {
     const provider = new ethers.providers.Web3Provider(auth.provider);
     const signer = provider.getSigner();
     const sender = auth.user?.address;
@@ -57,56 +57,42 @@ const PaymentPage = () => {
     const flowRate = serviceData.rate;
     const abi = new ethers.utils.AbiCoder();
 
-    const userData = abi.encode(
-      ["address", "int96"],
-      [vendorAddress, flowRate]
-    );
+    getFlow(sf!, sender!, receiverContract, signer).then((res) => {
+      console.log("res: ", res);
+      if (res.flowRate == 0) {
+        const userData = abi.encode(
+          ["address", "int96"],
+          [vendorAddress, flowRate]
+        );
 
-    console.log(
-      "sender: ",
-      sender,
-      "receivercon: ",
-      receiverContract,
-      "flowrate: ",
-      flowRate,
-      "signer: ",
-      signer,
-      "userdaT: ",
-      userData
-    );
+        startFlow(
+          sf!,
+          sender!,
+          receiverContract,
+          flowRate,
+          signer,
+          userData
+        ).then(() => {
+          setPaymentDone(true);
+          console.log("p done");
+        });
+      } else {
+        const userData = abi.encode(
+          ["address", "int96", "string"],
+          [vendorAddress, flowRate, "addService"]
+        );
 
-    startFlow(sf!, sender!, receiverContract, flowRate, signer, userData).then(
-      () => {
-        setPaymentDone(true);
-        console.log("p done");
+        const updatedFlowRate = Number(flowRate) + res.flowRate; //vendor flow rate + current flow rate
+        updateFlow(
+          sf!,
+          sender!,
+          receiverContract,
+          updatedFlowRate,
+          signer,
+          userData
+        );
       }
-    );
-  };
-
-  const removeService = () => {
-    const wallet = new ethers.Wallet(
-      "10a18b5294170edec5f8de73bc2650e8d0c112742275e0c5f229461340e67a28",
-      ethers.getDefaultProvider(
-        "https://intensive-wispy-rain.matic-testnet.discover.quiknode.pro/949bfe065d64157bb216deed0b3148aa1ca4effd/"
-      )
-    );
-    const sender = "0x0c49FFE688435dD45F3Bc47Ad9D8B0BfBc7Bad11";
-    const receiverContract = "0x76EdA1C989fF33fcbdff574afb925c82dbCc1a90";
-    const vendorAddress = "0x40d77E65c59710260543c4Bd6e59704F28637D4B";
-    const flowRate = "1";
-    const abi = new ethers.utils.AbiCoder();
-
-    const userData = abi.encode(
-      ["address", "int96", "string"],
-      [vendorAddress, flowRate, "removeService"]
-    );
-
-    updateFlow(sf!, sender, receiverContract, flowRate, wallet, userData).then(
-      () => {
-        setPaymentDone(true);
-        console.log("p done");
-      }
-    );
+    });
   };
 
   return (

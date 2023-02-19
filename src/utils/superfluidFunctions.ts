@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import type { Signer } from "ethers";
 import type { Framework } from "@superfluid-finance/sdk-core";
+import { Provider } from "@wagmi/core";
 
 export const asyncWrapper = async (asyncFunction: () => {}, params: Array) => {
   try {
@@ -10,6 +11,8 @@ export const asyncWrapper = async (asyncFunction: () => {}, params: Array) => {
     return [null, error];
   }
 };
+
+const SuperTokenAddress = import.meta.env.VITE_SUPERTOKEN_CONTRACT;
 
 const startFlow = async (
   sf: Framework,
@@ -21,9 +24,7 @@ const startFlow = async (
 ) => {
   //load the token you'd like to use like this
   //note that tokens may be loaded by symbol or by address
-  const superToken = await sf?.loadSuperToken(
-    "0x93D50cF93EBDa2f06f564339a31E0cac81fa479C"
-  );
+  const superToken = await sf?.loadSuperToken(SuperTokenAddress);
 
   let flowOp = superToken?.createFlow({
     sender,
@@ -31,8 +32,8 @@ const startFlow = async (
     flowRate,
     userData,
     overrides: {
-      gasLimit: 5000000
-    }
+      gasLimit: 5000000,
+    },
   });
 
   await flowOp?.exec(signer); // should have same address as `sender`
@@ -48,7 +49,7 @@ const updateFlow = async (
 ) => {
   //load the token you'd like to use like this
   //note that tokens may be loaded by symbol or by address
-  const superToken = await sf?.loadSuperToken("DAIx");
+  const superToken = await sf?.loadSuperToken(SuperTokenAddress);
 
   let flowOp = superToken?.createFlow({
     sender,
@@ -69,7 +70,7 @@ const stopFlow = async (
 ) => {
   //load the token you'd like to use like this
   //note that tokens may be loaded by symbol or by address
-  const superToken = await sf?.loadSuperToken("DAIx");
+  const superToken = await sf?.loadSuperToken(SuperTokenAddress);
 
   let flowOp = superToken?.deleteFlow({
     sender,
@@ -78,6 +79,22 @@ const stopFlow = async (
   });
 
   await flowOp?.exec(signer); // should have same address as `sender`
+};
+
+const getFlow = async (
+  sf: Framework,
+  sender: string,
+  receiver: string,
+  signer: Signer
+) => {
+  const superToken = await sf?.loadSuperToken(SuperTokenAddress);
+  const res = await superToken.getFlow({
+    sender,
+    receiver,
+    providerOrSigner: signer,
+  });
+
+  return res;
 };
 
 const approveContractToSpend = async (
@@ -133,4 +150,5 @@ export {
   upgradeTokens,
   downgradeTokens,
   batchTxns,
+  getFlow,
 };
