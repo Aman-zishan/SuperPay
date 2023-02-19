@@ -1,6 +1,9 @@
 import classnames from "classnames";
+import { useState } from "react";
 
 const AddServiceCard = ({ className = "" }) => {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <>
       <div
@@ -25,13 +28,17 @@ const AddServiceCard = ({ className = "" }) => {
         <div className="p-5">
           <div className="m-auto my-[0.7rem] h-[1.325rem] w-48 rounded-full bg-gray-200 dark:bg-gray-700"></div>
           <div className="mt-[1.4rem]">
-            {[...Array(2).keys()].map(() => (
-              <div className="mb-2.5 h-[0.6rem] max-w-[300px] rounded-full bg-gray-200 dark:bg-gray-700"></div>
+            {[...Array(2).keys()].map((num) => (
+              <div
+                key={num}
+                className="mb-2.5 h-[0.6rem] max-w-[300px] rounded-full bg-gray-200 dark:bg-gray-700"
+              ></div>
             ))}
           </div>
           <button
-            data-modal-target="authentication-modal"
-            data-modal-toggle="authentication-modal"
+            onClick={() => {
+              setShowModal(true);
+            }}
             className="my-3 mt-[1.4rem] inline-block rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
             type="button"
           >
@@ -55,30 +62,18 @@ const AddServiceCard = ({ className = "" }) => {
         </div>
       </div>
 
-      {/* <!-- Modal toggle --> */}
-      {/* <button
-        data-modal-target="authentication-modal"
-        data-modal-toggle="authentication-modal"
-        className="block rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        type="button"
-      >
-        Toggle modal
-      </button> */}
-
       {/* <!-- Main modal --> */}
       <div
-        id="authentication-modal"
-        tabIndex={-1}
-        aria-hidden="true"
-        className="fixed top-0 left-0 right-0 z-50 hidden h-modal w-full overflow-y-auto overflow-x-hidden p-4 md:inset-0 md:h-full"
+        style={{ display: `${showModal ? "block" : "none"}` }}
+        className="fixed inset-0 z-50 h-full w-full overflow-y-auto  overflow-x-hidden bg-[#0000004f] p-4"
       >
-        <div className="relative h-full w-full max-w-md md:h-auto">
+        <div className="absolute top-1/2 left-1/2 m-auto h-full w-full max-w-md -translate-x-1/2 -translate-y-1/2 md:h-auto">
           {/* <!-- Modal content --> */}
           <div className="relative rounded-lg bg-white shadow dark:bg-gray-700">
             <button
               type="button"
               className="absolute top-3 right-2.5 ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
-              data-modal-hide="authentication-modal"
+              onClick={() => setShowModal(false)}
             >
               <svg
                 aria-hidden="true"

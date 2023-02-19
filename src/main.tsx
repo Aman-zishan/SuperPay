@@ -9,6 +9,7 @@ import { ProvideAuth } from "@arcana/auth-react";
 import routerConfig from "./router";
 import { arcanaProvider } from "./utils/auth";
 import "./index.css";
+import "flowbite";
 
 const router = createBrowserRouter(routerConfig);
 
