@@ -26,6 +26,7 @@ const AddServiceCard = ({ className = "", vendor }: any) => {
             image: serviceImage,
             vendorId: vendor[0].address,
             vendor_name: vendor[0].name,
+            vendorCustomerIds: [],
           },
         ])
         .select();
