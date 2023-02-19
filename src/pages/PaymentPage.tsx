@@ -13,6 +13,8 @@ const PaymentPage = () => {
   const [paymentDone, setPaymentDone] = useState(false);
   const { serviceId } = useParams();
   const [serviceData, setserviceData] = useState<any>();
+  const [serviceIds, setserviceIds] = useState<any>();
+  const [customerIds, setcustomerIds] = useState<any>();
   const auth = useAuth();
 
   useEffect(() => {
@@ -23,6 +25,16 @@ const PaymentPage = () => {
         .eq("id", serviceId);
       setserviceData(serviceData![0]);
       console.log("serd: ", serviceData![0]);
+      const { data: serviceIdsData } = await supabase
+        .from("vendor_customer")
+        .select("services")
+        .eq("address", auth.user?.address);
+      const { data: customerIdsData } = await supabase
+        .from("service")
+        .select("vendorCustomerIds")
+        .eq("id", serviceId);
+      setserviceIds(serviceIdsData);
+      setcustomerIds(customerIdsData);
     };
 
     fetchData().catch(console.error);
@@ -48,7 +60,35 @@ const PaymentPage = () => {
 
   const sf = useContext(globalContext);
 
-  const startSubscription = () => {
+  const updateDatabase = async () => {
+    const userAddress = auth.user?.address;
+
+    console.log(customerIds![0].vendorCustomerIds);
+    if (
+      serviceId! in serviceIds![0].services ||
+      userAddress! in customerIds![0].vendorCustomerIds
+    ) {
+      alert("user already subscribed");
+      return;
+    } else {
+      //update serviceId list
+      serviceIds![0].services.push(parseInt(serviceId!));
+      console.log(serviceIds);
+      const { data: updateServiceArray } = await supabase
+        .from("vendor_customer")
+        .update([{ services: serviceIds![0].services }])
+        .eq("address", userAddress);
+
+      //update customerId list
+      customerIds![0].vendorCustomerIds.push(userAddress);
+      console.log(customerIds);
+      const { data: updateCustomerArray } = await supabase
+        .from("service")
+        .update([{ vendorCustomerIds: customerIds![0].vendorCustomerIds }])
+        .eq("id", serviceId);
+    }
+  };
+  const startSubscription = async () => {
     const provider = new ethers.providers.Web3Provider(auth.provider);
     const signer = provider.getSigner();
     const sender = auth.user?.address;
@@ -76,9 +116,10 @@ const PaymentPage = () => {
     );
 
     startFlow(sf!, sender!, receiverContract, flowRate, signer, userData).then(
-      () => {
+      async () => {
         setPaymentDone(true);
         console.log("p done");
+        updateDatabase();
       }
     );
   };
