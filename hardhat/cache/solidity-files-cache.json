@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\blyat\\lordmikecodes\\web3\\SuperPay\\hardhat\\contracts\\Lock.sol": {
-      "lastModificationDate": 1676800553521,
-      "contentHash": "cc9d619987ec2a3a3049f48a06953331",
+      "lastModificationDate": 1676806037368,
+      "contentHash": "41c4002ff3c283154ee060957f3cd1c0",
       "sourceName": "contracts/Lock.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -39,6 +39,7 @@
         "^0.8.14"
       ],
       "artifacts": [
+        "IPUSHCommInterface",
         "SuperApp"
       ]
     },
