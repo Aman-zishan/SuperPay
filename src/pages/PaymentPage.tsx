@@ -21,8 +21,8 @@ const PaymentPage = () => {
         .from("service")
         .select()
         .eq("id", serviceId);
-      setserviceData(serviceData[0]);
-      console.log("serd: ", serviceData[0]);
+      setserviceData(serviceData![0]);
+      console.log("serd: ", serviceData![0]);
     };
 
     fetchData().catch(console.error);
