@@ -1,11 +1,31 @@
+import { EthereumProvider } from "@arcana/auth";
+import { useAuth } from "@arcana/auth-react";
 import * as PushAPI from "@pushprotocol/restapi";
 import { ethers } from "ethers";
 import { arcanaProvider } from "./auth";
 
+interface argType {
+  address: string;
+  provider: any;
+}
+
+export const subscribeChannel = async ({ address, provider }: argType) => {
+  const _provider = new ethers.providers.Web3Provider(provider); //id onn aaki nok call cheyumbo useAuth nte sanam pass chey
+  const signer = _provider.getSigner();
+  const result = await PushAPI.channels.subscribe({
+    signer: signer,
+    user: `eip155:80001:${address}`,
+    channel: "eip155:80001:0x2b42dA16aEa56A6477c235D0de443a9a413B83E6",
+    verifyingContractAddress: "0xb3971BCef2D791bc4027BbfedFb47319A4AAaaAa",
+    env: "staging",
+  });
+  return result;
+};
+
 export const getNotification = async (address: string) => {
   const recievedNotifications = await PushAPI.user.getFeeds({
     user: `eip155:80001:${address}`, // user address in CAIP
-    spam: true,
+    spam: false,
     env: "staging",
   });
   return recievedNotifications;

@@ -1,20 +1,14 @@
 import { useAuth } from "@arcana/auth-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { arcanaProvider } from "../utils/auth";
+import { getNotification } from "../utils/notificationservices";
 
-const Navbar = () => {
+const Navbar = ({ notifications }: any) => {
   const [showNotification, setshowNotification] = useState(false);
   const auth = useAuth();
-  const {
-    user,
-    connect,
-    isLoggedIn,
-    loading,
-    loginWithSocial,
-    provider,
-    logout,
-  } = auth;
-  const navigate = useNavigate();
+  const { isLoggedIn, logout } = auth;
+  console.log(notifications);
 
   return (
     <nav className="border-gray-200 bg-white px-2 py-2.5 dark:bg-[#111213] sm:px-4">
@@ -93,38 +87,26 @@ const Navbar = () => {
                             className="space-y-4"
                             aria-labelledby="mega-menu-dropdown-button"
                           >
-                            <li className="border-b-[1px] border-solid border-gray-400 pb-4">
-                              <div className="format max-w-[300px] dark:format-invert">
-                                <h3 className="mb-0">Subscription started!</h3>
-                                <p>
-                                  A new Subscription to 0x..39 has been started!
-                                </p>
-                              </div>
-                            </li>
-                            <li className="border-b-[1px] border-solid border-gray-400 pb-4">
-                              <div className="format max-w-[300px] dark:format-invert">
-                                <h3 className="mb-0">Subscription started!</h3>
-                                <p>
-                                  A new Subscription to 0x..39 has been started!
-                                </p>
-                              </div>
-                            </li>
-                            <li className="border-b-[1px] border-solid border-gray-400 pb-4">
-                              <div className="format max-w-[300px] dark:format-invert">
-                                <h3 className="mb-0">Subscription started!</h3>
-                                <p>
-                                  A new Subscription to 0x..39 has been started!
-                                </p>
-                              </div>
-                            </li>
-                            <li className="border-b-[1px] border-solid border-gray-400 pb-4">
-                              <div className="format max-w-[300px] dark:format-invert">
-                                <h3 className="mb-0">Subscription started!</h3>
-                                <p>
-                                  A new Subscription to 0x..39 has been started!
-                                </p>
-                              </div>
-                            </li>
+                            {notifications ? (
+                              notifications.map((notification: any) => {
+                                return (
+                                  <li className="border-b-[1px] border-solid border-gray-400 pb-4">
+                                    <div className="format max-w-[300px] dark:format-invert">
+                                      <h3 className="mb-0">
+                                        {notification.title}
+                                      </h3>
+                                      <p>{notification.message}</p>
+                                    </div>
+                                  </li>
+                                );
+                              })
+                            ) : (
+                              <li className="border-b-[1px] border-solid border-gray-400 pb-4">
+                                <div className="format max-w-[300px] dark:format-invert">
+                                  <h3 className="mb-0">no notifications</h3>
+                                </div>
+                              </li>
+                            )}
                           </ul>
                         </div>
                       </div>

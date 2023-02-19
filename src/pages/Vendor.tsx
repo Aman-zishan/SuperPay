@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AddServiceCard from "../components/AddServiceCard";
+import Navbar from "../components/Navbar";
 import ServicesCard from "../components/ServicesCard";
 import Layout from "../layout";
+import { getNotification } from "../utils/notificationservices";
 import { supabase } from "../utils/supabaseClient";
 
 const VendorDashboard = () => {
   const { vendorId } = useParams();
   const [vendorData, setvendorData] = useState<any>();
   const [vendorServices, setvendorServices] = useState<any>();
+
   console.log(vendorId);
   useEffect(() => {
     const fetchData = async () => {
