@@ -62,8 +62,8 @@ const ServicePage = () => {
                 {serviceData[0].name}
               </h5>
               <p className="mb-3 text-left font-normal text-gray-700 dark:text-gray-400">
-                Youtube premium provides the best music quality and hi
-                resolution sounds.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod
               </p>
               <div className="mt-auto ml-auto flex gap-6">
                 <button

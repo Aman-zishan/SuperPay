@@ -152,7 +152,7 @@ const PaymentPage = () => {
         alt=""
       />
       <div className="format m-auto my-12 dark:format-invert">
-        <p className="m-auto mb-12 max-w-[23rem]">Zomato gold service</p>
+        <p className="m-auto mb-12 max-w-[23rem]">Lorem ipsum dolor sit amet</p>
         <div className="flex flex-col gap-1">
           <h4>Service Name : {serviceData.name}</h4>
           <h4>Rate : {calculateFlowRate(serviceData.rate)} SP/month</h4>
