@@ -30,6 +30,9 @@ const startFlow = async (
     receiver,
     flowRate,
     userData,
+    overrides: {
+      gasLimit: 5000000
+    }
   });
 
   await flowOp?.exec(signer); // should have same address as `sender`

@@ -1,4 +1,5 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
+import { useAuth } from "@arcana/auth-react";
 import globalContext from "../utils/globalState";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
@@ -8,10 +9,11 @@ import { startFlow, updateFlow } from "../utils/superfluidFunctions";
 import { ethers } from "ethers";
 
 const PaymentPage = () => {
-  const [walletConnected, setwalletConnected] = useState(false);
+  const [walletConnected, setwalletConnected] = useState(true);
   const [paymentDone, setPaymentDone] = useState(false);
   const { serviceId } = useParams();
   const [serviceData, setserviceData] = useState<any>();
+  const auth = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +21,8 @@ const PaymentPage = () => {
         .from("service")
         .select()
         .eq("id", serviceId);
-      setserviceData(serviceData);
+      setserviceData(serviceData[0]);
+      console.log("serd: ", serviceData[0]);
     };
 
     fetchData().catch(console.error);
@@ -31,16 +34,12 @@ const PaymentPage = () => {
   const sf = useContext(globalContext);
 
   const startSubscription = () => {
-    const wallet = new ethers.Wallet(
-      "10a18b5294170edec5f8de73bc2650e8d0c112742275e0c5f229461340e67a28",
-      ethers.getDefaultProvider(
-        "https://intensive-wispy-rain.matic-testnet.discover.quiknode.pro/949bfe065d64157bb216deed0b3148aa1ca4effd/"
-      )
-    );
-    const sender = "0x0c49FFE688435dD45F3Bc47Ad9D8B0BfBc7Bad11";
-    const receiverContract = "0x76EdA1C989fF33fcbdff574afb925c82dbCc1a90";
-    const vendorAddress = "0x40d77E65c59710260543c4Bd6e59704F28637D4B";
-    const flowRate = "2500000000000000";
+    const provider = new ethers.providers.Web3Provider(auth.provider);
+    const signer = provider.getSigner();
+    const sender = auth.user?.address;
+    const receiverContract = import.meta.env.VITE_SUPERAPP;
+    const vendorAddress = serviceData.vendorId;
+    const flowRate = serviceData.rate;
     const abi = new ethers.utils.AbiCoder();
 
     const userData = abi.encode(
@@ -48,7 +47,20 @@ const PaymentPage = () => {
       [vendorAddress, flowRate]
     );
 
-    startFlow(sf!, sender, receiverContract, flowRate, wallet, userData).then(
+    console.log(
+      "sender: ",
+      sender,
+      "receivercon: ",
+      receiverContract,
+      "flowrate: ",
+      flowRate,
+      "signer: ",
+      signer,
+      "userdaT: ",
+      userData
+    );
+
+    startFlow(sf!, sender!, receiverContract, flowRate, signer, userData).then(
       () => {
         setPaymentDone(true);
         console.log("p done");
@@ -85,7 +97,7 @@ const PaymentPage = () => {
   return (
     <>
       <header className="format m-auto my-[3rem] dark:format-invert">
-        <h1>{serviceData[0].name ? serviceData[0].name : ""}</h1>
+        <h1>{serviceData.name ? serviceData.name : ""}</h1>
       </header>
       <img
         className="m-auto max-w-[21rem] rounded-t-lg"
@@ -95,8 +107,8 @@ const PaymentPage = () => {
       <div className="format m-auto my-12 dark:format-invert">
         <p className="m-auto mb-12 max-w-[23rem]">Zomato gold service</p>
         <div className="flex flex-col gap-1">
-          <h4>Service Name : {serviceData[0].name}</h4>
-          <h4>Rate : {serviceData[0].rate}</h4>
+          <h4>Service Name : {serviceData.name}</h4>
+          <h4>Rate : {serviceData.rate} SP/sec</h4>
           <h4>Plan : 12 months</h4>
         </div>
       </div>

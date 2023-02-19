@@ -1,5 +1,5 @@
 const hre = require("hardhat")
-const { Framework } = require("@superfluid-finance/sdk-core")
+// const { Framework } = require("@superfluid-finance/sdk-core")
 require("dotenv").config()
 
 //to run this script:
@@ -18,10 +18,10 @@ async function main() {
         process.env.MUMBAI_URL
     )
 
-    const sf = await Framework.create({
-        chainId: (await provider.getNetwork()).chainId,
-        provider
-    })
+    // const sf = await Framework.create({
+    //     chainId: (await provider.getNetwork()).chainId,
+    //     provider
+    // })
 
     
     // We get the contract to deploy
@@ -29,14 +29,15 @@ async function main() {
     //deploy the money router account using the proper host address and the address of the first signer
     const superApp = await SuperApp.deploy(
         process.env.SUPERTOKEN_ADDRESS,
-        sf.settings.config.hostAddress,
-        sf.settings.config.cfaV1Address
+        "0xEB796bdb90fFA0f28255275e16936D25d3418603",
+        "0x49e565Ed1bdc17F3d220f72DF0857C26FA83F873",
+        "0x2b42dA16aEa56A6477c235D0de443a9a413B83E6"
     )
 
     await superApp.deployed()
 
     console.log("superApp deployed to:", superApp.address)
-    //0x76EdA1C989fF33fcbdff574afb925c82dbCc1a90
+    //0x7D376d9B33833CD2143B26DFcd00cb15f1aBbcfC
 }
 
 // We recommend this pattern to be able to use async/await everywhere
