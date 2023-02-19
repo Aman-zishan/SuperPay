@@ -2,9 +2,7 @@ import { useAuth } from "@arcana/auth-react";
 import "./App.css";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./utils/supabaseClient";
-import React, { useEffect, useState } from "react";
-import { arcanaProvider } from "./utils/auth";
-import Register from "./pages/register";
+import { useEffect, useState } from "react";
 import { ConnectButton } from "./components/ConnectButton";
 import Layout from "./layout";
 
@@ -15,6 +13,7 @@ const App = () => {
 
   const auth = useAuth();
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       const { data: userData } = await supabase

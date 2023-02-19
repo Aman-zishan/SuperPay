@@ -1,17 +1,35 @@
+import { useAuth } from "@arcana/auth-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import UserSubscriptions from "../components/UserSubscriptions";
+import {
+  getNotification,
+  subscribeChannel,
+} from "../utils/notificationservices";
 import { supabase } from "../utils/supabaseClient";
 
 const UserDashboard = () => {
+  const auth = useAuth();
   const [vendors, setvendors] = useState<any>();
   const { userId } = useParams();
   const [userData, setuserData] = useState<any>();
-  const [userServices, setuserServices] = useState<any>();
+  const [notifications, setnotifications] = useState<any>();
   console.log(userId);
   useEffect(() => {
     const fetchData = async () => {
+      const messages = await getNotification(userId!);
+      // try {
+      //   const r = await subscribeChannel({
+      //     address: userId!,
+      //     provider: auth.provider,
+      //   });
+      //   console.log("subssss:", r);
+      // } catch (error) {
+      //   console.log(error);
+      // }
+
+      setnotifications(messages);
       const { data: userData } = await supabase
         .from("vendor_customer")
         .select()
@@ -55,7 +73,7 @@ const UserDashboard = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar notifications={notifications} />
       {!userData ? (
         "loading"
       ) : (
