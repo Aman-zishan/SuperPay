@@ -60,7 +60,7 @@ const App = () => {
   return (
     <>
       {loading && <p style={{ color: "white" }}>loading</p>}
-      {!loading && !isLoggedIn && <ConnectButton></ConnectButton>}
+      {!loading && !isLoggedIn && <LandingPageTemplate />}
       {!loading && isLoggedIn && (
         <h2 style={{ color: "white" }}>{user?.email} logged in!</h2>
       )}
@@ -74,3 +74,41 @@ const App = () => {
 };
 
 export default App;
+
+const LandingPageTemplate = () => {
+  return (
+    <div>
+      {/* <!-- Section: Design Block --> */}
+      <section className="mb-40">
+        <div
+          className="relative overflow-hidden bg-cover bg-no-repeat"
+          style={{
+            backgroundPosition: "50%",
+            backgroundImage: `url(
+              "https://mdbcdn.b-cdn.net/img/new/slides/146.webp"
+            )`,
+            height: "100vh",
+          }}
+        >
+          <div
+            className="absolute top-0 right-0 bottom-0 left-0 h-full w-full overflow-hidden bg-fixed"
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.75)" }}
+          >
+            <div className="flex h-full items-center justify-center">
+              <div className="px-6 text-center text-white md:px-12">
+                <h1 className="mb-12 font-monda text-5xl font-bold tracking-tight md:text-6xl xl:text-6xl">
+                  Super Fuel Your business with Super Pay! <br />
+                  <span className="font-mono text-[28px]">
+                    DeFi payment gateway for streaming money payments
+                  </span>
+                </h1>
+                <ConnectButton />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* <!-- Section: Design Block --> */}
+    </div>
+  );
+};
