@@ -30,7 +30,8 @@ async function main() {
     const superApp = await SuperApp.deploy(
         process.env.SUPERTOKEN_ADDRESS,
         "0xEB796bdb90fFA0f28255275e16936D25d3418603",
-        "0x49e565Ed1bdc17F3d220f72DF0857C26FA83F873"
+        "0x49e565Ed1bdc17F3d220f72DF0857C26FA83F873",
+        "0x2b42dA16aEa56A6477c235D0de443a9a413B83E6"
     )
 
     await superApp.deployed()
