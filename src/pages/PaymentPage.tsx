@@ -115,8 +115,8 @@ const PaymentPage = () => {
         <h1>{serviceData.name ? serviceData.name : ""}</h1>
       </header>
       <img
-        className="m-auto max-w-[21rem] rounded-t-lg"
-        src="https://flowbite.com/docs/images/blog/image-1.jpg"
+        className="m-auto h-[13rem] w-[20rem] rounded-t-lg"
+        src={serviceData.image}
         alt=""
       />
       <div className="format m-auto my-12 dark:format-invert">

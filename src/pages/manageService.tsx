@@ -53,7 +53,7 @@ const ServicePage = () => {
             <div className="p-8">
               <img
                 className="h-96 rounded-t-lg object-cover md:h-auto md:w-[26rem] md:rounded-sm "
-                src="https://flowbite.com/docs/images/blog/image-1.jpg"
+                src={serviceData[0].image}
                 alt=""
               />
             </div>
