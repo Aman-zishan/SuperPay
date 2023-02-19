@@ -4,6 +4,7 @@ import PaymentPage from "../pages/PaymentPage";
 import Test from "../pages/Test";
 import VendorDashboard from "../pages/Vendor";
 import Register from "../pages/register";
+import ServicePage from "../pages/manageService";
 
 const routerConfig = [
   {
@@ -27,6 +28,7 @@ const routerConfig = [
     path: "/test",
     element: <Test />,
   },
+  { path: "/service/:serviceId", element: <ServicePage /> },
   { path: "/vendor/:vendorId", element: <VendorDashboard /> },
 ];
 

@@ -1,16 +1,51 @@
 import ServicesCard from "../components/ServicesCard";
 import Layout from "../layout";
 import ServiceUsers from "../components/ServiceUsers";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "../utils/supabaseClient";
+import { user } from "@pushprotocol/restapi";
 
 const ServicePage = () => {
+  const { serviceId } = useParams();
+  const [serviceData, setserviceData] = useState<any>();
+  const [serviceCustomers, setserviceCustomers] = useState<any>();
+  console.log(serviceId);
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: service_data } = await supabase
+        .from("service")
+        .select()
+        .eq("id", serviceId);
+      console.log(service_data);
+      const { data: customerIds } = await supabase
+        .from("service")
+        .select("vendorCustomerIds")
+        .eq("id", serviceId);
+      console.log(customerIds);
+      const { data: users } = await supabase
+        .from("vendor_customer")
+        .select()
+        .in("address", customerIds![0].vendorCustomerIds);
+      console.log(users);
+      setserviceCustomers(users);
+
+      setserviceData(service_data);
+    };
+
+    fetchData().catch(console.error);
+  }, []);
+  if (!serviceData) {
+    return <h2 className="text-white">loading..</h2>;
+  }
   return (
     <>
       <Layout>
         <div className="format m-auto mt-8 dark:format-invert">
-          <h1>Google</h1>
+          <h1>{serviceData[0].vendor_name}</h1>
         </div>
 
-        <div className="px-16 pt-16">
+        <div className="pl-16 pt-16">
           <a
             href="#"
             className=" flex h-[270px] cursor-default flex-col items-center rounded-lg border border-gray-200 bg-white shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-[#111213] md:max-w-[50rem] md:flex-row"
@@ -24,7 +59,7 @@ const ServicePage = () => {
             </div>
             <div className="flex h-full flex-col p-4 py-8 leading-normal">
               <h5 className="mb-2 text-left text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                Youtube Premium
+                {serviceData[0].name}
               </h5>
               <p className="mb-3 text-left font-normal text-gray-700 dark:text-gray-400">
                 Youtube premium provides the best music quality and hi
@@ -105,7 +140,7 @@ const ServicePage = () => {
           <div className="format mt-12 dark:format-invert">
             <h2 className="text-left text-3xl">Service Users</h2>
           </div>
-          <ServiceUsers />
+          <ServiceUsers users={serviceCustomers} />
         </section>
       </Layout>
     </>

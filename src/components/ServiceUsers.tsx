@@ -1,6 +1,6 @@
 import classNames from "classnames";
 
-const ServiceUsers = ({ className = "" }) => {
+const ServiceUsers = ({ className = "", users }: any) => {
   const services = [
     {
       name: "Binod",
@@ -48,19 +48,17 @@ const ServiceUsers = ({ className = "" }) => {
                 </tr>
               </thead>
               <tbody>
-                {services.map((service) => (
+                {users.map((user: any) => (
                   <tr className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
                     <th
                       scope="row"
                       className="whitespace-nowrap px-6 py-4 text-center font-medium text-gray-900 dark:text-white"
                     >
-                      {service.name}
+                      {user.name}
                     </th>
-                    <td className="px-6 py-4 text-center">{service.rate}</td>
-                    <td className="px-6 py-4 text-center">
-                      {service.startDate}
-                    </td>
-                    <td className="px-6 py-4 text-center">{service.status}</td>
+                    <td className="px-6 py-4 text-center">{user.address}</td>
+                    <td className="px-6 py-4 text-center">12/01/23</td>
+                    <td className="px-6 py-4 text-center">Active</td>
                   </tr>
                 ))}
               </tbody>

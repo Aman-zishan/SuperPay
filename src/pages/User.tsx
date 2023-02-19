@@ -16,10 +16,16 @@ const UserDashboard = () => {
         .from("vendor_customer")
         .select()
         .eq("address", userId);
+      const { data: serviceIds } = await supabase
+        .from("vendor_customer")
+        .select("services")
+        .eq("address", userId);
+
       const { data: userServiceData } = await supabase
         .from("service")
         .select()
-        .eq("vendorCustomerId", userId);
+        .in("id", serviceIds![0].services);
+      console.log(userServiceData);
       setuserData(userData);
       let ObjMap: any = {};
       userServiceData?.forEach((element) => {

@@ -6,11 +6,13 @@ import React, { useEffect, useState } from "react";
 import { arcanaProvider } from "./utils/auth";
 import Register from "./pages/register";
 import { ConnectButton } from "./components/ConnectButton";
+import Layout from "./layout";
 
 const App = () => {
   const [data, setData] = useState<any>();
   const [userExists, setUserExists] = useState<boolean>(false);
   const [loggedinuser, setloggedinuser] = useState<any>();
+
   const auth = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
@@ -56,18 +58,16 @@ const App = () => {
       navigate("register");
     }
   }
+
   return (
     <>
-      {loading && <p style={{ color: "white" }}>loading</p>}
-      {!loading && !isLoggedIn && <LandingPageTemplate />}
-      {!loading && isLoggedIn && (
-        <h2 style={{ color: "white" }}>{user?.email} logged in!</h2>
+      {loading && !loggedinuser ? (
+        <p style={{ color: "white" }}>loading</p>
+      ) : (
+        <LandingPageTemplate />
       )}
-      {!loading && isLoggedIn && (
-        <button style={{ color: "white" }} onClick={() => logout()}>
-          disconnect
-        </button>
-      )}
+      {/* {loading && <p style={{ color: "white" }}>loading</p>}
+      {!loading && !loggedinuser && <LandingPageTemplate />} */}
     </>
   );
 };
@@ -76,38 +76,40 @@ export default App;
 
 const LandingPageTemplate = () => {
   return (
-    <div>
-      {/* <!-- Section: Design Block --> */}
-      <section className="mb-40">
-        <div
-          className="relative overflow-hidden bg-cover bg-no-repeat"
-          style={{
-            backgroundPosition: "50%",
-            backgroundImage: `url(
-              "/Illustrations/bg.gif"
-            )`,
-            height: "100vh",
-          }}
-        >
-          <div
-            className="absolute top-0 right-0 bottom-0 left-0 h-full w-full overflow-hidden bg-fixed"
-            style={{ backgroundColor: "rgba(0, 0, 0, 0.75)" }}
-          >
-            <div className="flex h-full items-center justify-center">
-              <div className="px-6 text-center text-white md:px-12">
-                <h1 className="mb-12 font-monda text-5xl font-bold tracking-tight md:text-6xl xl:text-6xl">
-                  Super Fuel Your business with Super Pay! <br />
-                  <span className="font-mono text-[28px]">
+    <Layout>
+      <div className="m-auto">
+        {/* <!-- Section: Design Block --> */}
+        <section>
+          <div className=" overflow-hidden">
+            <div className="absolute top-0 right-0 bottom-0 left-0 h-full w-full overflow-hidden bg-fixed">
+              <div className="flex h-full items-center ">
+                <div className="px-6 text-left text-white md:px-12">
+                  <div className="flex">
+                    {" "}
+                    <h2 className="font-monda text-5xl font-normal leading-loose  md:text-6xl xl:text-6xl">
+                      Super Fuel Your business with{" "}
+                      <span className=" font-monda tracking-[0.5rem] text-[#26D537] ">
+                        SUPERPAY
+                      </span>
+                    </h2>{" "}
+                  </div>
+
+                  <br />
+                  <span className="font-mono text-[25px]">
                     DeFi payment gateway for streaming money payments
                   </span>
-                </h1>
-                <ConnectButton />
+                  <ConnectButton />
+                </div>
+                <div className="">
+                  {" "}
+                  <img src="/Illustrations/bg.png" alt="" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      {/* <!-- Section: Design Block --> */}
-    </div>
+        </section>
+        {/* <!-- Section: Design Block --> */}
+      </div>
+    </Layout>
   );
 };

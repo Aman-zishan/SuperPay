@@ -1,8 +1,46 @@
 import classnames from "classnames";
 import { useState } from "react";
+import { arcanaProvider } from "../utils/auth";
+import { supabase } from "../utils/supabaseClient";
 
-const AddServiceCard = ({ className = "" }) => {
+const AddServiceCard = ({ className = "", vendor }: any) => {
   const [showModal, setShowModal] = useState(false);
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+    const serviceName = event.target.serviceName.value;
+    const serviceRate = event.target.serviceRate.value;
+    const serviceImage = event.target.serviceImage.value;
+
+    if (!serviceName && !serviceRate && !serviceImage) {
+      alert("form data empty!");
+      return;
+    }
+    const isLoggedin = await arcanaProvider.isLoggedIn();
+    if (isLoggedin) {
+      const { data, error } = await supabase
+        .from("service")
+        .insert([
+          {
+            name: serviceName,
+            rate: serviceRate,
+            image: serviceImage,
+            vendorId: vendor[0].address,
+            vendor_name: vendor[0].name,
+          },
+        ])
+        .select();
+
+      if (error) {
+        alert("error updating DB");
+        console.log(error);
+        return;
+      }
+      if (data) {
+        console.log("user data saved in DB");
+        setShowModal(false);
+      }
+    }
+  };
 
   return (
     <>
@@ -69,7 +107,7 @@ const AddServiceCard = ({ className = "" }) => {
       >
         <div className="absolute top-1/2 left-1/2 m-auto h-full w-full max-w-md -translate-x-1/2 -translate-y-1/2 md:h-auto">
           {/* <!-- Modal content --> */}
-          <div className="relative rounded-lg bg-white shadow dark:bg-gray-700">
+          <div className="relative rounded-lg bg-white shadow dark:bg-[#121314]">
             <button
               type="button"
               className="absolute top-3 right-2.5 ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
@@ -91,59 +129,40 @@ const AddServiceCard = ({ className = "" }) => {
               <span className="sr-only">Close modal</span>
             </button>
             <div className="format px-20 py-12 dark:format-invert lg:px-8">
-              <h2 className="mb-4 text-2xl font-medium text-gray-900 dark:text-white">
+              <h2 className="mb-10 text-2xl font-medium text-gray-900 dark:text-white">
                 Add a new service
               </h2>
-              <form className="space-y-6" action="#">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="text-md mb-2 block font-medium text-gray-900 dark:text-white"
-                  >
-                    Service Name
-                  </label>
                   <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
-                    placeholder="Music Streaming"
+                    type="text"
+                    name="serviceName"
+                    className="h-[54px] w-[326px] rounded-lg border border-white bg-transparent p-2.5 font-monda text-sm text-white focus:border-[#26D537] focus:ring-[#26D537]"
+                    placeholder="Service Name"
                     required
                   />
                 </div>
                 <div>
-                  <label
-                    htmlFor="password"
-                    className="text-md mb-2 block font-medium text-gray-900 dark:text-white"
-                  >
-                    Service Rate ( / sec)
-                  </label>
                   <input
-                    name="password"
-                    id="password"
-                    placeholder="100"
-                    className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
+                    type="text"
+                    name="serviceRate"
+                    placeholder="Service Rate (Wei / sec)"
+                    className="h-[54px] w-[326px] rounded-lg border border-white bg-transparent p-2.5 font-monda text-sm text-white focus:border-[#26D537] focus:ring-[#26D537]"
                     required
                   />
                 </div>
                 <div>
-                  <label
-                    htmlFor="password"
-                    className="text-md mb-2 block font-medium text-gray-900 dark:text-white"
-                  >
-                    Image Link
-                  </label>
                   <input
-                    name="password"
-                    id="password"
+                    type="text"
+                    name="serviceImage"
                     placeholder="https://xyz.com/placeholder.png"
-                    className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
+                    className="h-[54px] w-[326px] rounded-lg border border-white bg-transparent p-2.5 font-monda text-sm text-white focus:border-[#26D537] focus:ring-[#26D537]"
                     required
                   />
                 </div>
                 <button
                   type="submit"
-                  className="mt-[3rem] w-[12rem] rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className="mx-auto my-[20px] mt-[50px] rounded-[10px] bg-[#26D537] py-[10px] px-[50px] font-monda font-bold uppercase text-white"
                 >
                   Submit
                 </button>

@@ -1,10 +1,12 @@
 import classnames from "classnames";
+import { useNavigate } from "react-router-dom";
 
 interface ServiceCardProps {
   className?: string;
-  title: string;
+  service: any;
 }
-const ServicesCard = ({ className, title }: ServiceCardProps) => {
+const ServicesCard = ({ className, service }: ServiceCardProps) => {
+  const navigate = useNavigate();
   return (
     <div
       className={classnames(
@@ -22,7 +24,7 @@ const ServicesCard = ({ className, title }: ServiceCardProps) => {
       <div className="p-5">
         <a href="#">
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {title}
+            {service.name}
           </h5>
         </a>
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
@@ -30,7 +32,9 @@ const ServicesCard = ({ className, title }: ServiceCardProps) => {
           sounds.
         </p>
         <a
-          href="#"
+          onClick={() => {
+            navigate(`/service/${service.id}`);
+          }}
           className="my-3 inline-block rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
         >
           Manage

@@ -28,7 +28,7 @@ const VendorDashboard = () => {
     fetchData().catch(console.error);
   }, []);
   if (!vendorData) {
-    return <h2>Something went wrong</h2>;
+    return <h2 className="text-white">loading..</h2>;
   }
   return (
     <>
@@ -43,9 +43,9 @@ const VendorDashboard = () => {
           <div className="mt-14 grid grid-cols-3 justify-between gap-24 px-16">
             {vendorServices.map((item: any) => {
               console.log(item);
-              return <ServicesCard title={item.name} key={item.id} />;
+              return <ServicesCard service={item} key={item.id} />;
             })}
-            <AddServiceCard />
+            <AddServiceCard vendor={vendorData} />
           </div>
         </section>
       </Layout>
