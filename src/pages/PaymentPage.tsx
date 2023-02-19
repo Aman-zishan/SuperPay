@@ -48,7 +48,7 @@ const PaymentPage = () => {
       [vendorAddress, flowRate]
     );
 
-    startFlow(sf, sender, receiverContract, flowRate, wallet, userData).then(
+    startFlow(sf!, sender, receiverContract, flowRate, wallet, userData).then(
       () => {
         setPaymentDone(true);
         console.log("p done");
@@ -74,7 +74,7 @@ const PaymentPage = () => {
       [vendorAddress, flowRate, "removeService"]
     );
 
-    updateFlow(sf, sender, receiverContract, flowRate, wallet, userData).then(
+    updateFlow(sf!, sender, receiverContract, flowRate, wallet, userData).then(
       () => {
         setPaymentDone(true);
         console.log("p done");
