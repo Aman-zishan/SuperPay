@@ -5,6 +5,7 @@ import UserSubscriptions from "../components/UserSubscriptions";
 import { supabase } from "../utils/supabaseClient";
 
 const UserDashboard = () => {
+  const [vendors, setvendors] = useState<any>();
   const { userId } = useParams();
   const [userData, setuserData] = useState<any>();
   const [userServices, setuserServices] = useState<any>();
@@ -15,14 +16,32 @@ const UserDashboard = () => {
         .from("vendor_customer")
         .select()
         .eq("address", userId);
-      //  const { data: userServiceData } = await supabase
-      //    .from("service")
-      //    .select()
-      //    .eq("userId", userId);
-      //  console.log(userData, userServiceData);
-      //  setuserServices(userServiceData);
+      const { data: userServiceData } = await supabase
+        .from("service")
+        .select()
+        .eq("vendorCustomerId", userId);
       setuserData(userData);
-      console.log(userData);
+      let ObjMap: any = {};
+      userServiceData?.forEach((element) => {
+        var makeKey = element.vendor_name;
+        if (!ObjMap[makeKey]) {
+          ObjMap[makeKey] = [];
+        }
+
+        ObjMap[makeKey].push({
+          name: element.name,
+          rate: element.rate,
+        });
+      });
+      console.log(ObjMap);
+      let sample: any = [];
+      console.log(
+        Object.keys(ObjMap).forEach((element: any) => {
+          console.log(element);
+          sample.push({ name: element, services: ObjMap[element] });
+        })
+      );
+      setvendors(sample);
     };
 
     fetchData().catch(console.error);
@@ -40,7 +59,7 @@ const UserDashboard = () => {
             <h2 className="mb-[0.588889em]">{userData[0].name}</h2>
             <p>{userData[0].address}</p>
           </header>
-          <UserSubscriptions className="mt-16" />
+          <UserSubscriptions vendors={vendors} className="mt-16" />
         </>
       )}
     </>
