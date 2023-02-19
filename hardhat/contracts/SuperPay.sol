@@ -11,6 +11,14 @@ import {SuperAppBase} from "@superfluid-finance/ethereum-contracts/contracts/app
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+interface IPUSHCommInterface {
+    function sendNotification(
+        address _channel,
+        address _recipient,
+        bytes calldata _identity
+    ) external;
+}
+
 /// @dev Constant Flow Agreement registration key, used to get the address from the host.
 bytes32 constant CFA_ID = keccak256(
     "org.superfluid-finance.agreements.ConstantFlowAgreement.v1"
@@ -39,6 +47,10 @@ contract SuperApp is Ownable, SuperAppBase {
 
     IConstantFlowAgreementV1 immutable cfa;
 
+    //push protocl variables
+    address EPNS__COMM = 0xb3971BCef2D791bc4027BbfedFb47319A4AAaaAa;
+    address CHANNEL_ADDRESS;
+
     mapping(address => mapping(address => int96)) services; // user => vendor => flowRate
     mapping(address => address[]) vendorList; //user => list of vendors user subscribed to
 
@@ -56,7 +68,8 @@ contract SuperApp is Ownable, SuperAppBase {
     constructor(
         ISuperToken acceptedToken,
         ISuperfluid _host,
-        IConstantFlowAgreementV1 _cfa
+        IConstantFlowAgreementV1 _cfa,
+        address channelAddress
     ) {
         assert(address(_host) != address(0));
         assert(address(acceptedToken) != address(0));
@@ -64,6 +77,7 @@ contract SuperApp is Ownable, SuperAppBase {
         _acceptedToken = acceptedToken;
         host = _host;
         cfa = _cfa;
+        CHANNEL_ADDRESS = channelAddress;
 
         // Registers Super App, indicating it is the final level (it cannot stream to other super
         // apps), and that the `before*` callbacks should not be called on this contract, only the
@@ -121,6 +135,31 @@ contract SuperApp is Ownable, SuperAppBase {
             ];
             vendorList[sender].pop();
         }
+    }
+
+    function sendNotification(
+        string memory title,
+        string memory message,
+        address receiver
+    ) internal {
+        IPUSHCommInterface(EPNS__COMM).sendNotification(
+            CHANNEL_ADDRESS, // from channel - recommended to set channel via dApp and put it's value -> then once contract is deployed, go back and add the contract address as delegate for your channel
+            receiver, // to recipient, put address(this) in case you want Broadcast or Subset. For Targetted put the address to which you want to send
+            bytes(
+                string(
+                    // We are passing identity here: https://docs.epns.io/developers/developer-guides/sending-notifications/advanced/notification-payload-types/identity/payload-identity-implementations
+                    abi.encodePacked(
+                        "0", // this is notification identity: https://docs.epns.io/developers/developer-guides/sending-notifications/advanced/notification-payload-types/identity/payload-identity-implementations
+                        "+", // segregator
+                        "3", // this is payload type: https://docs.epns.io/developers/developer-guides/sending-notifications/advanced/notification-payload-types/payload (1, 3 or 4) = (Broadcast, targetted or subset)
+                        "+", // segregator
+                        title, // this is notificaiton title
+                        "+", // segregator
+                        message // notification body
+                    )
+                )
+            )
+        );
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -219,6 +258,18 @@ contract SuperApp is Ownable, SuperAppBase {
                 newCtx
             );
         }
+
+        sendNotification(
+            "New Subscriber",
+            string(abi.encode(sender)),
+            vendorAddress
+        );
+
+        sendNotification(
+            "Successfully Subscribed",
+            string(abi.encode(vendorAddress)),
+            sender
+        );
     }
 
     function afterAgreementUpdated(
@@ -291,6 +342,17 @@ contract SuperApp is Ownable, SuperAppBase {
                 newOutFlowRateToOwner,
                 newCtx
             );
+
+            sendNotification(
+                "New Service Added",
+                string(abi.encode(vendorAddress)),
+                sender
+            );
+            sendNotification(
+                "New Subscriber",
+                string(abi.encode(sender)),
+                vendorAddress
+            );
         } else if (
             keccak256(bytes(operation)) == keccak256(bytes("removeService"))
         ) {
@@ -332,6 +394,17 @@ contract SuperApp is Ownable, SuperAppBase {
                     newCtx
                 );
             }
+
+            sendNotification(
+                "Service Removed",
+                string(abi.encode(vendorAddress)),
+                sender
+            );
+            sendNotification(
+                "Subscriber Revoked",
+                string(abi.encode(sender)),
+                vendorAddress
+            );
         }
     }
 
@@ -416,6 +489,12 @@ contract SuperApp is Ownable, SuperAppBase {
                     );
                 }
             }
+
+            sendNotification(
+                "All subscription terminated",
+                "all of your subscriptions have been succesfully terminated",
+                sender
+            );
         }
     }
 }
