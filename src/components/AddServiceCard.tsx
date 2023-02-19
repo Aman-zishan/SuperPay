@@ -45,7 +45,7 @@ const AddServiceCard = ({ className = "" }) => {
             Add a New Service
             <svg
               aria-hidden="true"
-              className="relative ml-2 -mr-1 inline-block h-4 w-4 stroke-white"
+              className="relative mb-[6px] ml-2 -mr-1 inline-block h-4 w-4 stroke-white"
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
