@@ -14,7 +14,7 @@ const UserSubscriptions = ({ className, vendors }: any) => {
           vendors.map((vendor: any) => (
             <div className="mt-12 px-20">
               <div className="format flex flex-row gap-4 dark:format-invert">
-                <img src={imgsrc} className="h-8 w-8 rounded-full" />{" "}
+                <img src="/icons/vendor.png" className="h-8 w-8" />{" "}
                 <h3>{vendor.name}</h3>
               </div>
               <div className="relative overflow-x-auto shadow-md sm:rounded-lg">

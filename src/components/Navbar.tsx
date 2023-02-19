@@ -2,7 +2,8 @@ const Navbar = () => {
   return (
     <nav className="border-gray-200 bg-white px-2 py-2.5 dark:bg-[#111213] sm:px-4">
       <div className="container mx-auto flex flex-wrap items-center justify-between">
-        <a href="" className="flex items-center">
+        <a href="" className="flex items-center gap-5">
+          <img src="/icons/logo.png" className="h-12 w-12" />{" "}
           <h5 className="body-font font-monda text-2xl tracking-[0.5rem] text-white ">
             SUPERPAY
           </h5>
