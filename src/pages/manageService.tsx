@@ -52,7 +52,7 @@ const ServicePage = () => {
           >
             <div className="p-8">
               <img
-                className="h-96 rounded-t-lg object-cover md:h-auto md:w-[26rem] md:rounded-sm "
+                className="h-96 max-h-[14rem] rounded-t-lg object-cover md:h-auto md:w-[26rem] md:rounded-sm "
                 src={serviceData[0].image}
                 alt=""
               />

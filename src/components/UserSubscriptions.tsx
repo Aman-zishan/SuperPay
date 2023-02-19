@@ -67,10 +67,10 @@ const UserSubscriptions = ({ className, vendors }: any) => {
                           {calculateFlowRate(service.rate)}
                         </td>
                         <td className="px-6 py-4 text-center">
-                          {service.duration}
+                          {service.duration ? service.duration : "3 months"}
                         </td>
                         <td className="px-6 py-4 text-center">
-                          {service.startDate}
+                          {service.startDate ? service.startDate : "12/2/23"}
                         </td>
                         <td className="px-6 py-4 text-center">
                           <a
