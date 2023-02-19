@@ -21,7 +21,9 @@
     "typechain": "^8.1.0"
   },
   "dependencies": {
+    "@openzeppelin/contracts": "^4.8.1",
     "@superfluid-finance/ethereum-contracts": "^1.5.0",
+    "@superfluid-finance/sdk-core": "^0.6.1",
     "dotenv": "^16.0.3"
   }
 }

@@ -1,10 +1,10 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "C:\\blyat\\lordmikecodes\\web3\\SuperPay\\hardhat\\contracts\\SuperPay.sol": {
-      "lastModificationDate": 1676754194805,
-      "contentHash": "604b637fbb9ee10776f5dd98de93c2cd",
-      "sourceName": "contracts/SuperPay.sol",
+    "C:\\blyat\\lordmikecodes\\web3\\SuperPay\\hardhat\\contracts\\Lock.sol": {
+      "lastModificationDate": 1676800553521,
+      "contentHash": "cc9d619987ec2a3a3049f48a06953331",
+      "sourceName": "contracts/Lock.sol",
       "solcConfig": {
         "version": "0.8.17",
         "settings": {
@@ -43,7 +43,7 @@
       ]
     },
     "C:\\blyat\\lordmikecodes\\web3\\SuperPay\\hardhat\\node_modules\\@openzeppelin\\contracts\\access\\Ownable.sol": {
-      "lastModificationDate": 1675758064770,
+      "lastModificationDate": 1676641446060,
       "contentHash": "e436cea06129be2c73cda4b1acc848b5",
       "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
       "solcConfig": {
@@ -240,7 +240,7 @@
       ]
     },
     "C:\\blyat\\lordmikecodes\\web3\\SuperPay\\hardhat\\node_modules\\@openzeppelin\\contracts\\utils\\Context.sol": {
-      "lastModificationDate": 1675758064460,
+      "lastModificationDate": 1676641445862,
       "contentHash": "5f2c5c4b6af2dd4551027144797bc8be",
       "sourceName": "@openzeppelin/contracts/utils/Context.sol",
       "solcConfig": {
@@ -274,8 +274,43 @@
         "Context"
       ]
     },
+    "C:\\blyat\\lordmikecodes\\web3\\SuperPay\\hardhat\\node_modules\\@superfluid-finance\\ethereum-contracts\\contracts\\interfaces\\tokens\\TokenInfo.sol": {
+      "lastModificationDate": 1675758070255,
+      "contentHash": "6326411b7eb3d451fdffd149d821a7cb",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/tokens/TokenInfo.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">= 0.8.4"
+      ],
+      "artifacts": [
+        "TokenInfo"
+      ]
+    },
     "C:\\blyat\\lordmikecodes\\web3\\SuperPay\\hardhat\\node_modules\\@openzeppelin\\contracts\\token\\ERC20\\IERC20.sol": {
-      "lastModificationDate": 1675758064687,
+      "lastModificationDate": 1676641446006,
       "contentHash": "ad7c2d0af148c8f9f097d65deeb4da6b",
       "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
       "solcConfig": {
@@ -347,41 +382,6 @@
       ],
       "artifacts": [
         "ISuperfluidGovernance"
-      ]
-    },
-    "C:\\blyat\\lordmikecodes\\web3\\SuperPay\\hardhat\\node_modules\\@openzeppelin\\contracts\\token\\ERC777\\IERC777.sol": {
-      "lastModificationDate": 1675758064730,
-      "contentHash": "35b56a00de0fb16f9e6a8d7464d31b0b",
-      "sourceName": "@openzeppelin/contracts/token/ERC777/IERC777.sol",
-      "solcConfig": {
-        "version": "0.8.17",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "IERC777"
       ]
     },
     "C:\\blyat\\lordmikecodes\\web3\\SuperPay\\hardhat\\node_modules\\@superfluid-finance\\ethereum-contracts\\contracts\\interfaces\\superfluid\\ISuperToken.sol": {
@@ -500,10 +500,10 @@
         "ISuperTokenFactory"
       ]
     },
-    "C:\\blyat\\lordmikecodes\\web3\\SuperPay\\hardhat\\node_modules\\@superfluid-finance\\ethereum-contracts\\contracts\\interfaces\\tokens\\TokenInfo.sol": {
-      "lastModificationDate": 1675758070255,
-      "contentHash": "6326411b7eb3d451fdffd149d821a7cb",
-      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/tokens/TokenInfo.sol",
+    "C:\\blyat\\lordmikecodes\\web3\\SuperPay\\hardhat\\node_modules\\@openzeppelin\\contracts\\token\\ERC777\\IERC777.sol": {
+      "lastModificationDate": 1676641446032,
+      "contentHash": "35b56a00de0fb16f9e6a8d7464d31b0b",
+      "sourceName": "@openzeppelin/contracts/token/ERC777/IERC777.sol",
       "solcConfig": {
         "version": "0.8.17",
         "settings": {
@@ -529,47 +529,10 @@
       },
       "imports": [],
       "versionPragmas": [
-        ">= 0.8.4"
+        "^0.8.0"
       ],
       "artifacts": [
-        "TokenInfo"
-      ]
-    },
-    "C:\\blyat\\lordmikecodes\\web3\\SuperPay\\hardhat\\node_modules\\@superfluid-finance\\ethereum-contracts\\contracts\\interfaces\\superfluid\\ISuperApp.sol": {
-      "lastModificationDate": 1675758070173,
-      "contentHash": "3b1a28352fc3ab7b2659bc3ab3c7bb92",
-      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperApp.sol",
-      "solcConfig": {
-        "version": "0.8.17",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./ISuperToken.sol"
-      ],
-      "versionPragmas": [
-        ">= 0.8.4"
-      ],
-      "artifacts": [
-        "ISuperApp"
+        "IERC777"
       ]
     },
     "C:\\blyat\\lordmikecodes\\web3\\SuperPay\\hardhat\\node_modules\\@superfluid-finance\\ethereum-contracts\\contracts\\interfaces\\superfluid\\Definitions.sol": {
@@ -609,6 +572,43 @@
         "FlowOperatorDefinitions",
         "SuperAppDefinitions",
         "SuperfluidGovernanceConfigs"
+      ]
+    },
+    "C:\\blyat\\lordmikecodes\\web3\\SuperPay\\hardhat\\node_modules\\@superfluid-finance\\ethereum-contracts\\contracts\\interfaces\\superfluid\\ISuperApp.sol": {
+      "lastModificationDate": 1675758070173,
+      "contentHash": "3b1a28352fc3ab7b2659bc3ab3c7bb92",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperApp.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ISuperToken.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.8.4"
+      ],
+      "artifacts": [
+        "ISuperApp"
       ]
     },
     "C:\\blyat\\lordmikecodes\\web3\\SuperPay\\hardhat\\node_modules\\@superfluid-finance\\ethereum-contracts\\contracts\\interfaces\\superfluid\\ISuperAgreement.sol": {
