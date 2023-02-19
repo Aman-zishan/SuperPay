@@ -1,8 +1,24 @@
 import classNames from "classnames";
+import { ethers } from "ethers";
 
 const UserSubscriptions = ({ className, vendors }: any) => {
   const imgsrc =
     "https://static.vecteezy.com/system/resources/previews/010/353/285/non_2x/colourful-google-logo-on-white-background-free-vector.jpg";
+
+  function calculateFlowRate(amount) {
+    if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
+      alert("You can only calculate a flowRate based on a number");
+      return;
+    } else if (typeof Number(amount) === "number") {
+      if (Number(amount) === 0) {
+        return 0;
+      }
+      const amountInWei = ethers.BigNumber.from(amount);
+      const monthlyAmount = ethers.utils.formatEther(amountInWei.toString());
+      const calculatedFlowRate = monthlyAmount * 3600 * 24 * 30;
+      return calculatedFlowRate;
+    }
+  }
 
   return (
     <div className={classNames(className)}>
@@ -25,7 +41,7 @@ const UserSubscriptions = ({ className, vendors }: any) => {
                         Service
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
-                        Rate
+                        Rate ( SP / month )
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
                         Duration
@@ -48,7 +64,7 @@ const UserSubscriptions = ({ className, vendors }: any) => {
                           {service.name}
                         </th>
                         <td className="px-6 py-4 text-center">
-                          {service.rate}
+                          {calculateFlowRate(service.rate)}
                         </td>
                         <td className="px-6 py-4 text-center">
                           {service.duration}

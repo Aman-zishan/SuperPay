@@ -31,6 +31,21 @@ const PaymentPage = () => {
     return <h2>Something went wrong</h2>;
   }
 
+  function calculateFlowRate(amount) {
+    if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
+      alert("You can only calculate a flowRate based on a number");
+      return;
+    } else if (typeof Number(amount) === "number") {
+      if (Number(amount) === 0) {
+        return 0;
+      }
+      const amountInWei = ethers.BigNumber.from(amount);
+      const monthlyAmount = ethers.utils.formatEther(amountInWei.toString());
+      const calculatedFlowRate = monthlyAmount * 3600 * 24 * 30;
+      return calculatedFlowRate;
+    }
+  }
+
   const sf = useContext(globalContext);
 
   const startSubscription = () => {
@@ -100,15 +115,15 @@ const PaymentPage = () => {
         <h1>{serviceData.name ? serviceData.name : ""}</h1>
       </header>
       <img
-        className="m-auto max-w-[21rem] rounded-t-lg"
-        src="https://flowbite.com/docs/images/blog/image-1.jpg"
+        className="m-auto h-[13rem] w-[20rem] rounded-t-lg"
+        src={serviceData.image}
         alt=""
       />
       <div className="format m-auto my-12 dark:format-invert">
         <p className="m-auto mb-12 max-w-[23rem]">Zomato gold service</p>
         <div className="flex flex-col gap-1">
           <h4>Service Name : {serviceData.name}</h4>
-          <h4>Rate : {serviceData.rate} SP/sec</h4>
+          <h4>Rate : {calculateFlowRate(serviceData.rate)} SP/month</h4>
           <h4>Plan : 12 months</h4>
         </div>
       </div>

@@ -16,8 +16,8 @@ const ServicesCard = ({ className, service }: ServiceCardProps) => {
     >
       <a href="#">
         <img
-          className="rounded-t-lg"
-          src="https://flowbite.com/docs/images/blog/image-1.jpg"
+          className="m-auto h-[13rem] w-full rounded-t-lg"
+          src={service.image}
           alt=""
         />
       </a>
